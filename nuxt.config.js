@@ -13,6 +13,9 @@ export default {
   head: {
     titleTemplate: '%s - ' + process.env.BASE_TITLE,
     title: process.env.BASE_TITLE,
+    htmlAttrs: {
+      lang: 'ja'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -120,6 +123,11 @@ export default {
     BASE_TITLE: process.env.BASE_TITLE,
     BASE_IMG: process.env.BASE_IMG,
     DESCRIPTION: process.env.DESCRIPTION,
+  },
+
+  // 動的ルーティングを行う
+  generate: {
+    fallback: true
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

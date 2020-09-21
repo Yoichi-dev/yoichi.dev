@@ -21,7 +21,7 @@
       </v-list-item>
       <v-card-actions>
         <v-spacer />
-        <v-btn text color="primary" :to="linkTo(cardData, propUrl)">この記事を見る</v-btn>
+        <v-btn text color="primary" :to="linkTo(cardData, propUrl)" aria-label="この記事を見る">この記事を見る</v-btn>
       </v-card-actions>
     </v-card>
   </v-hover>
@@ -38,10 +38,10 @@ export default {
     linkTo: () => (obj, str) => {
       return { name: str + '-id', params: { id: obj.fields.slug } }
     },
-    formatDate: () => inputDate => {
+    formatDate: () => (inputDate) => {
       return moment(inputDate).format('YYYY/MM/DD(ddd) HH:mm')
-    }
-  }
+    },
+  },
 }
 </script>
 

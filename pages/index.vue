@@ -4,7 +4,7 @@
       <v-row no-gutters>
         <v-img
           :min-height="'calc(100vh - ' + $vuetify.application.top +'px)'"
-          v-bind:src="require('@/assets/img/top.jpg')"
+          v-bind:src="require('@/assets/img/top.webp')"
         >
           <v-theme-provider dark>
             <v-container fill-height>
@@ -58,6 +58,7 @@
           class="ma-2"
           href="https://www.instagram.com/yoichiro.todaka"
           target="_blank"
+          rel="noopener"
           large
           outlined
         >
