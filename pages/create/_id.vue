@@ -13,7 +13,14 @@
         <v-col cols="12" md="8">
           <template v-if="currentPost" class="container">
             <div class="post-content" v-html="$md.render(currentPost.fields.body)"></div>
-            <v-btn class="ma-2" :href="currentPost.fields.url" target="_blank" large outlined>
+            <v-btn
+              class="ma-2"
+              :href="currentPost.fields.url"
+              target="_blank"
+              rel="noopener"
+              large
+              outlined
+            >
               <v-icon>mdi-web</v-icon>
               <span class="text--darken-1">サイトを見る</span>
             </v-btn>
