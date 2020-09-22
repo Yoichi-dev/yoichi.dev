@@ -19,7 +19,13 @@
                     :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']"
                   >{{title}}</span>
                 </v-col>
-                <v-btn class="aligin-self-end" fab outlined @click="$vuetify.goTo('#about')">
+                <v-btn
+                  class="aligin-self-end"
+                  fab
+                  outlined
+                  @click="$vuetify.goTo('#about')"
+                  aria-label="こちら"
+                >
                   <v-icon>mdi-chevron-double-down</v-icon>
                 </v-btn>
               </v-row>
@@ -46,11 +52,25 @@
           <v-img v-bind:src="require('@/assets/img/avatar.jpg')"></v-img>
         </v-avatar>
         <div></div>
-        <v-btn class="ma-2" href="https://twitter.com/Yoichi_dev" target="_blank" large outlined>
+        <v-btn
+          class="ma-2"
+          href="https://twitter.com/Yoichi_dev"
+          target="_blank"
+          rel="noopener"
+          large
+          outlined
+        >
           <v-icon>mdi-twitter</v-icon>
           <span class="text--darken-1">Twitter</span>
         </v-btn>
-        <v-btn class="ma-2" href="https://github.com/Yoichi-dev" target="_blank" large outlined>
+        <v-btn
+          class="ma-2"
+          href="https://github.com/Yoichi-dev"
+          target="_blank"
+          rel="noopener"
+          large
+          outlined
+        >
           <v-icon>mdi-github</v-icon>
           <span class="text--darken-1">GitHub</span>
         </v-btn>
