@@ -91,6 +91,5 @@ export default {
   font-family: '';
   font-weight: bold;
   -webkit-text-stroke: 1px #000;
-  text-stroke: 1px #000;
 }
 </style>
