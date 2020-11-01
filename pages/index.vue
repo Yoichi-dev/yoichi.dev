@@ -3,14 +3,14 @@
     <v-container class="nonecss" id="userData">
       <div class="py-6"></div>
       <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomData()">
+        <v-btn outlined color="indigo" @click="getRoomData()" :disabled="btn">
           自分のルームへ接続
         </v-btn>
       </v-row>
       <div class="py-6"></div>
       <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomRandom()">
-          テスト用ランダム接続確認
+        <v-btn outlined color="indigo" @click="getRoomRandom()" :disabled="btn">
+          【テスト用】ON LIVE1位の部屋に接続
         </v-btn>
       </v-row>
     </v-container>
@@ -30,6 +30,7 @@ export default {
       roomData: '',
       roomId: '',
       socket: null,
+      btn: false,
       commentCnt: 0,
       styles: {
         backgroundColor: '#FFFFFF',
@@ -41,7 +42,7 @@ export default {
   },
   head() {
     return {
-      title: this.roomData.room_name || 'SHOWROOM',
+      title: 'ホーム',
     }
   },
   // 離脱時
@@ -95,18 +96,21 @@ export default {
         console.log('ID無し')
         this.$router.push('/roomid')
       }
+      this.btn = true
       // キー取得
       axios
         .get(
-          'http://192.168.11.2:3001/apis/live_info/' + this.$store.state.roomid
+          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+            this.$store.state.roomid
         )
         .then((response) => {
           if (response.data.room_name === undefined) {
             console.log('ページが存在しません')
             this.roomData = 'ページが存在しません'
+            this.btn = false
             return
           }
-          console.log(response.data)
+          // console.log(response.data)
           this.roomData = response.data
           if (response.data.bcsvr_key != '') {
             this.setting()
@@ -114,6 +118,7 @@ export default {
           } else {
             alert('配信停止中です')
             this.roomData = '配信停止中です'
+            this.btn = false
           }
         })
     },
@@ -151,7 +156,7 @@ export default {
       let random = Math.round(
         Math.random() * document.documentElement.clientHeight
       )
-      console.log(random + ':' + data.cm)
+      // console.log(random + ':' + data.cm)
       // 見えなくなるから再度ランダム
       if (
         random > document.documentElement.clientHeight - 100 ||
@@ -183,22 +188,27 @@ export default {
       console.log('count')
     },
     getRoomRandom() {
+      this.btn = true
       // キー取得
-      axios.get('http://192.168.11.2:3001/apis/onlive').then((response) => {
-        console.log(response.data)
-        if (response.data === undefined) {
-          console.log('ページが存在しません')
-          this.roomData = 'ページが存在しません'
-          return
-        }
-        this.roomData = response.data
-        if (response.data != '') {
-          this.setting()
-          this.connectSocket()
-        } else {
-          this.roomData = '配信停止中です'
-        }
-      })
+      axios
+        .get('https://niconico-showroom-api.herokuapp.com/apis/onlive')
+        .then((response) => {
+          // console.log(response.data)
+          if (response.data === undefined) {
+            console.log('ページが存在しません')
+            this.roomData = 'ページが存在しません'
+            this.btn = false
+            return
+          }
+          this.roomData = response.data
+          if (response.data != '') {
+            this.setting()
+            this.connectSocket()
+          } else {
+            this.roomData = '配信停止中です'
+            this.btn = false
+          }
+        })
     },
   },
 }

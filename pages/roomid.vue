@@ -10,7 +10,12 @@
             :rules="rules"
           >
             <template v-slot:append-outer>
-              <v-btn outlined color="indigo" @click="getRoomData(roomId)">
+              <v-btn
+                outlined
+                color="indigo"
+                @click="getRoomData(roomId)"
+                :disabled="btn"
+              >
                 ルーム情報取得
               </v-btn>
             </template></v-text-field
@@ -20,10 +25,13 @@
       <v-row justify="center" align="center">
         <v-col cols="12" md="10">
           <div class="py-6"></div>
-          <div v-if="roomData" class="text-h5">
+          <div v-if="roomData === 'read'" class="text-h5">
+            ステータス：<span class="green--text">読み込み中</span>
+          </div>
+          <div v-if="roomData != 'read' && roomData" class="text-h5">
             ステータス：<span class="green--text">登録済み</span>
           </div>
-          <div v-else class="text-h5">
+          <div v-if="!roomData" class="text-h5">
             ステータス：<span class="red--text">未登録</span>
           </div>
           <div class="py-6"></div>
@@ -47,6 +55,17 @@
               </tbody>
             </template>
           </v-simple-table>
+          <div class="py-6"></div>
+          <v-card class="mx-auto" max-width="80%">
+            <v-card-title>ルームIDとは？</v-card-title>
+            <v-card-subtitle
+              >自分のページの矢印のURLを入力してください</v-card-subtitle
+            >
+            <v-img
+              v-bind:src="require('@/assets/img/url.png')"
+              height="100%"
+            ></v-img>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -62,15 +81,17 @@ export default {
       rules: [(value) => !!value || '入力してください'],
       roomData: '',
       roomId: '',
+      btn: false,
     }
   },
   head() {
     return {
-      title: this.roomData.room_name || 'SHOWROOM',
+      title: 'ルームID設定',
     }
   },
   mounted() {
     if (this.$store.state.roomid != null) {
+      this.roomData = 'read'
       this.getRoomData(this.$store.state.roomid)
     }
   },
@@ -85,24 +106,37 @@ export default {
         'https://www.showroom-live.com/room/profile?room_id=',
         ''
       )
+      this.btn = true
+      this.roomData = 'read'
       // キー取得
       axios
-        .get('http://localhost:3001/apis/live_info/' + replaceRoomId)
+        .get(
+          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+            replaceRoomId
+        )
         .then((response) => {
           if (response.data.room_name === undefined) {
             alert('ページが存在しません')
+            this.btn = false
             this.roomData = ''
             this.roomId = ''
+            if (this.$store.state.roomid != null) {
+              this.roomData = 'read'
+              this.getRoomData(this.$store.state.roomid)
+            }
+            return
           }
           console.log(response.data)
           this.roomData = response.data
           this.roomId = response.data.room_id
           this.$store.commit('setRoomid', response.data.room_id)
+          this.btn = false
         })
         .catch((err) => {
           alert('ページが存在しません')
           this.roomData = ''
           this.roomId = ''
+          this.btn = false
         })
     },
   },

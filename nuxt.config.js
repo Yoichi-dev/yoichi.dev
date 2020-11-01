@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+require('dotenv').config()
+
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -9,12 +11,19 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - showroom',
+    titleTemplate: '%s | niconico Showroom',
     title: 'showroom',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: process.env.DESCRIPTION_N },
+      { hid: 'og:site_name', property: 'og:site_name', content: process.env.BASE_TITLE },
+      { hid: 'og:type', property: 'og:type', content: 'website' },
+      { hid: 'og:url', property: 'og:url', content: process.env.BASE_URL },
+      { hid: 'og:title', property: 'og:title', content: process.env.BASE_TITLE },
+      { hid: 'og:description', property: 'og:description', content: process.env.DESCRIPTION_N },
+      { hid: 'og:image', property: 'og:image', content: process.env.BASE_IMG },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     script: [
       {
@@ -48,6 +57,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -72,9 +82,17 @@ export default {
     }
   },
 
-  // localhost以外からでもアクセス可
-  server: {
-    host: '0.0.0.0' // デフォルト: localhost
+  // 環境設定
+  env: {
+    BASE_URL: process.env.BASE_URL,
+    BASE_TITLE: process.env.BASE_TITLE,
+    BASE_IMG: process.env.BASE_IMG,
+    DESCRIPTION: process.env.DESCRIPTION_N,
+  },
+
+  // 動的ルーティングを行う
+  generate: {
+    fallback: true
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

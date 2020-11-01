@@ -29,7 +29,7 @@ export default {
   },
   head() {
     return {
-      title: 'SHOWROOM',
+      title: '背景色設定',
     }
   },
   mounted() {

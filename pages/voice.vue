@@ -61,7 +61,7 @@ export default {
   },
   head() {
     return {
-      title: 'SHOWROOM',
+      title: '読み上げ設定',
     }
   },
   mounted() {

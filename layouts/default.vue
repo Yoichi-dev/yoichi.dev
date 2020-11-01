@@ -33,6 +33,11 @@
           </v-list-item>
         </v-list>
       </v-container>
+      <template v-slot:append>
+        <div class="pa-3">
+          <v-btn to="/info" nuxt block :color="bgColor"> info </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -71,6 +76,11 @@ export default {
     return {
       items: [
         {
+          icon: 'mdi-home-outline',
+          title: 'ホーム',
+          to: '/',
+        },
+        {
           icon: 'mdi-door',
           title: 'Room ID登録',
           to: '/roomid',
@@ -91,7 +101,7 @@ export default {
           to: '/voice',
         },
       ],
-      title: 'Yoichi.dev',
+      title: 'Yoichi.dev - niconico Showroom',
       collapseOnScroll: true,
       bgColor: 'white',
       primaryDrawer: {
