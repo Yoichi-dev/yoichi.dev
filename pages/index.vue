@@ -10,7 +10,7 @@
       <div class="py-6"></div>
       <v-row justify="center" align="center">
         <v-btn outlined color="indigo" @click="getRoomRandom()" :disabled="btn">
-          【テスト用】適当な部屋に接続
+          【テスト用】ON LIVE1位の部屋に接続
         </v-btn>
       </v-row>
       <div class="py-6"></div>
