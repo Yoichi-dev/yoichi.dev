@@ -13,6 +13,15 @@
           【テスト用】ON LIVE1位の部屋に接続
         </v-btn>
       </v-row>
+      <div class="py-6"></div>
+      <v-row v-if="loading" justify="center" align="center">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="green"
+          indeterminate
+        ></v-progress-circular>
+      </v-row>
     </v-container>
   </v-main>
 </template>
@@ -38,6 +47,7 @@ export default {
       },
       checkbox: false,
       speech: false,
+      loading: false,
     }
   },
   head() {
@@ -97,6 +107,7 @@ export default {
         this.$router.push('/roomid')
       }
       this.btn = true
+      this.loading = true
       // キー取得
       axios
         .get(
@@ -108,6 +119,7 @@ export default {
             console.log('ページが存在しません')
             this.roomData = 'ページが存在しません'
             this.btn = false
+            this.loading = false
             return
           }
           // console.log(response.data)
@@ -119,6 +131,7 @@ export default {
             alert('配信停止中です')
             this.roomData = '配信停止中です'
             this.btn = false
+            this.loading = false
           }
         })
     },
@@ -189,6 +202,7 @@ export default {
     },
     getRoomRandom() {
       this.btn = true
+      this.loading = true
       // キー取得
       axios
         .get('https://niconico-showroom-api.herokuapp.com/apis/onlive')
@@ -198,6 +212,7 @@ export default {
             console.log('ページが存在しません')
             this.roomData = 'ページが存在しません'
             this.btn = false
+            this.loading = false
             return
           }
           this.roomData = response.data
@@ -207,6 +222,7 @@ export default {
           } else {
             this.roomData = '配信停止中です'
             this.btn = false
+            this.loading = false
           }
         })
     },
