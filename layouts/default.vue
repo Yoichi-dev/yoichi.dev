@@ -62,11 +62,17 @@
 
     <nuxt />
 
-    <!-- <v-footer :inset="footer.inset" app>
+    <v-footer :inset="footer.inset" :color="bgColor" app>
       <span class="px-4"
         >&copy; {{ new Date().getFullYear() + ' ' + title }}</span
       >
-    </v-footer> -->
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn text small @click="commentLog">コメントログ</v-btn>
+        <v-btn text small @click="freeGiftLog">ギフトログ（無料）</v-btn>
+        <v-btn text small @click="preGiftLog">ギフトログ（有料）</v-btn>
+      </v-toolbar-items>
+    </v-footer>
   </v-app>
 </template>
 
@@ -133,6 +139,15 @@ export default {
       this.collapseOnScroll = flg
       this.primaryDrawer.model = flg
       this.bgColor = this.$store.state.backgroundcolor
+    },
+    commentLog() {
+      this.$nuxt.$emit('commentModalOpen')
+    },
+    freeGiftLog() {
+      this.$nuxt.$emit('freeGiftModalOpen')
+    },
+    preGiftLog() {
+      this.$nuxt.$emit('preGiftModalOpen')
     },
   },
 }

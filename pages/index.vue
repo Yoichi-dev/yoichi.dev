@@ -10,7 +10,7 @@
       <div class="py-6"></div>
       <v-row justify="center" align="center">
         <v-btn outlined color="indigo" @click="getRoomRandom()" :disabled="btn">
-          【テスト用】ON LIVE1位の部屋に接続
+          【テスト用】適当な部屋に接続
         </v-btn>
       </v-row>
       <div class="py-6"></div>
@@ -21,6 +21,144 @@
           color="green"
           indeterminate
         ></v-progress-circular>
+      </v-row>
+      <v-row justify="center">
+        <v-dialog v-model="commentDialog" scrollable max-width="500px">
+          <v-card max-width="800px" class="mx-auto">
+            <v-toolbar color="cyan" dark>
+              <v-btn icon>
+                <v-icon>mdi-comment-processing-outline</v-icon>
+              </v-btn>
+              <v-toolbar-title>【実験機能】コメントログ</v-toolbar-title>
+            </v-toolbar>
+            <v-list three-line>
+              <v-subheader
+                >実験機能なので開くと不具合発生する可能性有り</v-subheader
+              >
+              <template v-for="(comment, index) in comments">
+                <v-divider :key="index" inset></v-divider>
+                <v-list-item
+                  :key="comment.name + '' + index"
+                  :id="comment.name + '' + index"
+                >
+                  <v-list-item-avatar>
+                    <v-img
+                      :src="
+                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                        comment.avatar +
+                        '.png'
+                      "
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="comment.name"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-html="comment.comment"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="freeGiftDialog" scrollable max-width="500px">
+          <v-card max-width="800px" class="mx-auto">
+            <v-toolbar color="green" dark>
+              <v-btn icon>
+                <v-icon>mdi-gift-outline</v-icon>
+              </v-btn>
+              <v-toolbar-title>【実験機能】ギフトログ（無料）</v-toolbar-title>
+            </v-toolbar>
+
+            <v-list three-line>
+              <v-subheader
+                >実験機能なので開くと不具合発生する可能性有り</v-subheader
+              >
+              <template v-for="(freeGift, index) in freeGifts">
+                <v-divider :key="index" inset></v-divider>
+                <v-list-item
+                  :key="freeGift.name + '' + index"
+                  :id="freeGift.name + '' + index"
+                >
+                  <v-list-item-avatar>
+                    <v-img
+                      :src="
+                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                        freeGift.avatar +
+                        '.png'
+                      "
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="freeGift.name"
+                    ></v-list-item-title>
+                    <v-img
+                      max-height="50"
+                      max-width="50"
+                      :src="
+                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
+                        freeGift.giftimg +
+                        '_s.png'
+                      "
+                    ></v-img>
+                    × {{ freeGift.count }}
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="preGiftDialog" scrollable max-width="500px">
+          <v-card max-width="800px" class="mx-auto">
+            <v-toolbar color="green" dark>
+              <v-btn icon>
+                <v-icon>mdi-gift-outline</v-icon>
+              </v-btn>
+              <v-toolbar-title>【実験機能】ギフトログ（有料）</v-toolbar-title>
+            </v-toolbar>
+
+            <v-list three-line>
+              <v-subheader
+                >実験機能なので開くと不具合発生する可能性有り</v-subheader
+              >
+              <template v-for="(preGift, index) in preGifts">
+                <v-divider :key="index" inset></v-divider>
+                <v-list-item
+                  :key="preGift.name + '' + index"
+                  :id="preGift.name + '' + index"
+                >
+                  <v-list-item-avatar>
+                    <v-img
+                      :src="
+                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                        preGift.avatar +
+                        '.png'
+                      "
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="preGift.name"
+                    ></v-list-item-title>
+                    <v-img
+                      max-height="50"
+                      max-width="50"
+                      :src="
+                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
+                        preGift.giftimg +
+                        '_s.png'
+                      "
+                    ></v-img>
+                    × {{ preGift.count }}
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </v-dialog>
       </v-row>
     </v-container>
   </v-main>
@@ -48,6 +186,13 @@ export default {
       checkbox: false,
       speech: false,
       loading: false,
+      target: 0,
+      commentDialog: false,
+      freeGiftDialog: false,
+      preGiftDialog: false,
+      comments: [],
+      freeGifts: [],
+      preGifts: [],
     }
   },
   head() {
@@ -60,6 +205,9 @@ export default {
     this.socket.close()
     this.$nuxt.$emit('openMenu', true)
     next()
+  },
+  created() {
+    this.setListener()
   },
   mounted() {
     // 接続
@@ -89,8 +237,13 @@ export default {
         if (Number.isFinite(Number(getMessage.cm)) && getMessage.cm <= 50) {
           this.getCount(getMessage)
         } else {
+          this.commentLog(getMessage)
           this.getComment(getMessage)
         }
+      }
+      // ギフト
+      if (getMessage.g != undefined) {
+        this.giftLog(getMessage)
       }
     }
     // 疎通確認
@@ -101,6 +254,11 @@ export default {
     }, 60000)
   },
   methods: {
+    setListener() {
+      this.$nuxt.$on('commentModalOpen', this.commentModalOpen)
+      this.$nuxt.$on('freeGiftModalOpen', this.freeGiftModalOpen)
+      this.$nuxt.$on('preGiftModalOpen', this.preGiftModalOpen)
+    },
     getRoomData() {
       if (this.$store.state.roomid === null) {
         console.log('ID無し')
@@ -158,6 +316,9 @@ export default {
       this.socket.send('SUB	' + this.roomData.bcsvr_key)
       document.getElementById('userData').style.display = 'none'
     },
+    commentLog(data) {
+      this.comments.push({ avatar: data.av, name: data.ac, comment: data.cm })
+    },
     async getComment(data) {
       let niconicoText = document.createElement('div')
       niconicoText.className = 'niconico'
@@ -169,16 +330,17 @@ export default {
       let random = Math.round(
         Math.random() * document.documentElement.clientHeight
       )
-      // console.log(random + ':' + data.cm)
       // 見えなくなるから再度ランダム
-      if (
+      while (
         random > document.documentElement.clientHeight - 100 ||
-        random <= 20
+        random <= 20 ||
+        (this.target - 100 <= random && this.target + 100 >= random)
       ) {
         random = Math.round(
           Math.random() * document.documentElement.clientHeight
         )
       }
+      this.target = random
       niconicoText.style.top = random + 'px'
       niconicoText.appendChild(document.createTextNode(data.cm))
       document.getElementsByTagName('main')[0].appendChild(niconicoText)
@@ -216,6 +378,7 @@ export default {
             return
           }
           this.roomData = response.data
+          console.log(response.data.room_name)
           if (response.data != '') {
             this.setting()
             this.connectSocket()
@@ -225,6 +388,84 @@ export default {
             this.loading = false
           }
         })
+    },
+    commentModalOpen() {
+      this.commentDialog = true
+    },
+    freeGiftModalOpen() {
+      this.freeGiftDialog = true
+    },
+    preGiftModalOpen() {
+      this.preGiftDialog = true
+    },
+    giftLog(data) {
+      // TODO:要修正
+      // 有料
+      if (data.gt === 1) {
+        let flg = this.preGifts.some((value) => {
+          // ユーザを特定
+          if (value.userid === data.u && value.giftimg === data.g) {
+            // ギフト数加算
+            value.count = Number(value.count) + Number(data.n)
+            return true
+          }
+        })
+        // 新規
+        if (!flg) {
+          this.preGifts.push({
+            avatar: data.av,
+            userid: data.u,
+            name: data.ac,
+            count: data.n,
+            giftimg: data.g,
+          })
+        }
+      } else {
+        // 扱いが難しい虹星
+        if (data.g === 1601) {
+          // 無料
+          let nijiflg = this.freeGifts.some((value) => {
+            // ユーザを特定
+            if (value.userid === data.u && value.giftimg === data.g) {
+              // ギフト数加算
+              value.count = Number(value.count) + Number(data.n)
+              return true
+            }
+          })
+          // 新規
+          if (!nijiflg) {
+            this.freeGifts.push({
+              avatar: data.av,
+              userid: data.u,
+              name: data.ac,
+              count: data.n,
+              giftimg: data.g,
+            })
+          }
+        } else {
+          // 無料
+          let flg = this.freeGifts.some((value) => {
+            // ユーザを特定
+            if (value.userid === data.u) {
+              // ギフト数加算
+              value.count = Number(value.count) + Number(data.n)
+              // ギフトアイコン更新
+              value.giftimg = data.g
+              return true
+            }
+          })
+          // 新規
+          if (!flg) {
+            this.freeGifts.push({
+              avatar: data.av,
+              userid: data.u,
+              name: data.ac,
+              count: data.n,
+              giftimg: data.g,
+            })
+          }
+        }
+      }
     },
   },
 }
