@@ -101,7 +101,7 @@ export default {
           to: '/voice',
         },
       ],
-      title: 'Yoichi.dev - niconico Showroom',
+      title: 'Yoichi.dev - Niconico Showroom',
       collapseOnScroll: true,
       bgColor: 'white',
       primaryDrawer: {
