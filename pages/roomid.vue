@@ -21,6 +21,14 @@
             </template></v-text-field
           >
         </v-col>
+        <v-col cols="12" md="10"
+          >※すこアニで使ってるURLでは無いので注意　例：自分のこの<a
+            href="https://www.showroom-live.com/room/profile?room_id=317313"
+            target="_blank"
+            rel="noopener"
+            >ページ</a
+          >のURL</v-col
+        >
       </v-row>
       <v-row justify="center" align="center">
         <v-col cols="12" md="10">

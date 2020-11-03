@@ -52,6 +52,7 @@
       <v-app-bar-nav-icon
         v-if="primaryDrawer.type !== 'permanent'"
         @click.stop="primaryDrawer.model = !primaryDrawer.model"
+        aria-label="メニュー"
       ></v-app-bar-nav-icon>
       <v-toolbar-title
         style="cursor: pointer"
