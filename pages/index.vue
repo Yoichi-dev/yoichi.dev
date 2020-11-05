@@ -29,12 +29,9 @@
               <v-btn icon>
                 <v-icon>mdi-comment-processing-outline</v-icon>
               </v-btn>
-              <v-toolbar-title>【実験機能】コメントログ</v-toolbar-title>
+              <v-toolbar-title>コメントログ</v-toolbar-title>
             </v-toolbar>
             <v-list three-line>
-              <v-subheader
-                >実験機能なので開くと不具合発生する可能性有り</v-subheader
-              >
               <template v-for="(comment, index) in comments">
                 <v-divider :key="index" inset></v-divider>
                 <v-list-item
@@ -69,13 +66,10 @@
               <v-btn icon>
                 <v-icon>mdi-gift-outline</v-icon>
               </v-btn>
-              <v-toolbar-title>【実験機能】ギフトログ（無料）</v-toolbar-title>
+              <v-toolbar-title>ギフトログ（無料）</v-toolbar-title>
             </v-toolbar>
 
             <v-list three-line>
-              <v-subheader
-                >実験機能なので開くと不具合発生する可能性有り</v-subheader
-              >
               <template v-for="(freeGift, index) in freeGifts">
                 <v-divider :key="index" inset></v-divider>
                 <v-list-item
@@ -117,13 +111,10 @@
               <v-btn icon>
                 <v-icon>mdi-gift-outline</v-icon>
               </v-btn>
-              <v-toolbar-title>【実験機能】ギフトログ（有料）</v-toolbar-title>
+              <v-toolbar-title>ギフトログ（有料）</v-toolbar-title>
             </v-toolbar>
 
             <v-list three-line>
-              <v-subheader
-                >実験機能なので開くと不具合発生する可能性有り</v-subheader
-              >
               <template v-for="(preGift, index) in preGifts">
                 <v-divider :key="index" inset></v-divider>
                 <v-list-item
@@ -191,14 +182,40 @@ export default {
       freeGiftDialog: false,
       preGiftDialog: false,
       comments: [],
+      stockComments: [],
       freeGifts: [],
+      stockFreeGifts: [],
       preGifts: [],
+      stockPreGifts: [],
     }
   },
   head() {
     return {
       title: 'ホーム',
     }
+  },
+  watch: {
+    commentDialog: function (newValue) {
+      if (newValue) {
+        this.comments = this.stockComments
+      } else {
+        this.comments = []
+      }
+    },
+    freeGiftDialog: function (newValue) {
+      if (newValue) {
+        this.freeGifts = this.stockFreeGifts
+      } else {
+        this.freeGifts = []
+      }
+    },
+    preGiftDialog: function (newValue) {
+      if (newValue) {
+        this.preGifts = this.stockPreGifts
+      } else {
+        this.preGifts = []
+      }
+    },
   },
   // 離脱時
   beforeRouteLeave(to, from, next) {
@@ -317,7 +334,11 @@ export default {
       document.getElementById('userData').style.display = 'none'
     },
     commentLog(data) {
-      this.comments.push({ avatar: data.av, name: data.ac, comment: data.cm })
+      this.stockComments.push({
+        avatar: data.av,
+        name: data.ac,
+        comment: data.cm,
+      })
     },
     async getComment(data) {
       let niconicoText = document.createElement('div')
@@ -412,7 +433,7 @@ export default {
         })
         // 新規
         if (!flg) {
-          this.preGifts.push({
+          this.stockPreGifts.push({
             avatar: data.av,
             userid: data.u,
             name: data.ac,
@@ -434,7 +455,7 @@ export default {
           })
           // 新規
           if (!nijiflg) {
-            this.freeGifts.push({
+            this.stockFreeGifts.push({
               avatar: data.av,
               userid: data.u,
               name: data.ac,
