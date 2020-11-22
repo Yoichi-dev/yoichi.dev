@@ -1,4 +1,4 @@
-# yoichi.dev
+# showroom-event-analyzer
 
 ## Build Setup
 

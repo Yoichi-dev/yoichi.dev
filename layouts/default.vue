@@ -16,7 +16,13 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -34,15 +40,23 @@
         @click.stop="primaryDrawer.model = !primaryDrawer.model"
         aria-label="メニュー"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title style="cursor: pointer" @click="$router.push('/')" v-text="title" />
+      <v-toolbar-title
+        style="cursor: pointer"
+        @click="$router.push('/')"
+        v-text="title"
+      />
     </v-app-bar>
 
     <v-main>
-      <nuxt />
+      <v-container>
+        <nuxt />
+      </v-container>
     </v-main>
 
     <v-footer :inset="footer.inset" app>
-      <span class="px-4">&copy; {{ new Date().getFullYear() + " " + title }}</span>
+      <span class="px-4"
+        >&copy; {{ new Date().getFullYear() + ' ' + footerTitle }}</span
+      >
     </v-footer>
   </v-app>
 </template>
@@ -53,27 +67,23 @@ export default {
     return {
       items: [
         {
-          icon: 'mdi-pencil-outline',
-          title: 'My Skill',
-          to: '/skill',
+          icon: 'mdi-home-variant-outline',
+          title: 'ホーム',
+          to: '/',
         },
         {
-          icon: 'mdi-book-open-page-variant',
-          title: 'Blog',
-          to: '/blog',
+          icon: 'mdi-calendar-plus',
+          title: '集計イベント追加',
+          to: '/add',
         },
         {
-          icon: 'mdi-folder-plus-outline',
-          title: 'Create App & Site',
-          to: '/create',
-        },
-        {
-          icon: 'mdi-message-processing-outline',
-          title: 'Diary',
-          to: '/diary',
+          icon: 'mdi-information-outline',
+          title: 'info',
+          to: '/info',
         },
       ],
-      title: 'Yoichi.dev',
+      title: 'Showroom Event Analyzer',
+      footerTitle: 'Yoichi.dev - Showroom Event Analyzer',
       primaryDrawer: {
         model: null,
         type: 'default (no property)',
