@@ -266,11 +266,7 @@ export default {
   methods: {
     hourChart() {
       this.loaded = true
-
-      let comparisonDay = ''
-
       let nowDate = new Date()
-
       let today = new Date(
         nowDate.getFullYear(),
         nowDate.getMonth(),
