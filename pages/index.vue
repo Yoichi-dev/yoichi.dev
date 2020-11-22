@@ -1,6 +1,14 @@
 <template>
   <v-row justify="center" align="center">
     <h1 class="text-h5 mt-10">現在集計中のイベント一覧</h1>
+    <v-col cols="12" md="10" align="center" v-if="loading">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="green"
+        indeterminate
+      ></v-progress-circular>
+    </v-col>
     <v-col cols="12" md="10">
       <v-row>
         <v-col cols="12" sm="4" md="4" v-for="(event, i) in events" :key="i">
@@ -43,6 +51,7 @@ export default {
       events: [],
       endEvent: [],
       unixTime: null,
+      loading: true,
     }
   },
   head() {
@@ -67,6 +76,7 @@ export default {
             this.endEvent.push(element)
           }
         })
+        this.loading = false
       })
   },
 }
