@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+require('dotenv').config()
+
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -87,6 +89,15 @@ export default {
   // 動的ルーティングを行う
   generate: {
     fallback: true
+  },
+
+  env: {
+    BASE_URL: process.env.BASE_URL,
+    BASE_TITLE: process.env.BASE_TITLE,
+    BASE_IMG: process.env.BASE_IMG,
+    DESCRIPTION: process.env.DESCRIPTION,
+    SHOWROOM_EVENT_ANALYZE_API_UEL: process.env.SHOWROOM_EVENT_ANALYZE_API_UEL,
+    SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST: process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
