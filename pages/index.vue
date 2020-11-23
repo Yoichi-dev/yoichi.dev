@@ -1,6 +1,5 @@
 <template>
   <v-row justify="center" align="center">
-    <h1 class="text-h5 mt-10">現在集計中のイベント一覧</h1>
     <v-col cols="12" md="10" align="center" v-if="loading">
       <v-progress-circular
         :size="70"
@@ -9,8 +8,11 @@
         indeterminate
       ></v-progress-circular>
     </v-col>
+    <v-col cols="12" md="10" align="center">
+      <h1 class="text-h5 mt-10">現在集計中のイベント</h1>
+    </v-col>
     <v-col cols="12" md="10">
-      <v-row>
+      <v-row v-if="events.length">
         <v-col cols="12" sm="4" md="4" v-for="(event, i) in events" :key="i">
           <v-hover v-slot:default="{ hover }" close-delay="50">
             <v-card class="mx-auto" :elevation="hover ? 16 : 2">
@@ -37,6 +39,7 @@
           </v-hover>
         </v-col>
       </v-row>
+      <v-row v-else> 現在集計中のイベントはありません </v-row>
     </v-col>
   </v-row>
 </template>
