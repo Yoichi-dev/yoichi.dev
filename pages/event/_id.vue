@@ -11,6 +11,7 @@
               v-if="loaded"
               :chartdata="pointChartdata"
               :options="pointOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -25,6 +26,7 @@
               v-if="loaded"
               :chartdata="followerChartdata"
               :options="followerOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -39,6 +41,7 @@
               v-if="loaded"
               :chartdata="rankChartdata"
               :options="rankOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -54,6 +57,7 @@
               v-if="loaded"
               :chartdata="dayPointChartdata"
               :options="pointOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -68,6 +72,7 @@
               v-if="loaded"
               :chartdata="dayFollowerChartdata"
               :options="followerOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -82,6 +87,7 @@
               v-if="loaded"
               :chartdata="dayRankChartdata"
               :options="rankOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -98,6 +104,7 @@
               v-if="loaded"
               :chartdata="allPointChartdata"
               :options="pointOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -113,6 +120,7 @@
               v-if="loaded"
               :chartdata="allFollowerChartdata"
               :options="followerOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -128,6 +136,7 @@
               v-if="loaded"
               :chartdata="allRankChartdata"
               :options="rankOptions"
+              :height="height"
             />
           </v-card>
         </v-col>
@@ -157,7 +166,7 @@ export default {
   data() {
     return {
       loaded: false,
-      eventData: null,
+      height: 400,
       pointChartdata: {
         labels: [],
         datasets: [],
@@ -262,6 +271,9 @@ export default {
     this.hourChart()
     this.dayChart()
     this.allChart()
+    if (this.eventData.data.length > 10 && window.parent.screen.width < 600) {
+      this.height = 800
+    }
   },
   methods: {
     hourChart() {
