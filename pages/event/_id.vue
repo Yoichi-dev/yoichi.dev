@@ -271,8 +271,12 @@ export default {
     this.hourChart()
     this.dayChart()
     this.allChart()
-    if (this.eventData.data.length > 10 && window.parent.screen.width < 600) {
-      this.height = 800
+    if (this.eventData.data.length > 10) {
+      if (window.parent.screen.width < 600) {
+        this.height = 800
+      } else {
+        this.height = 600
+      }
     }
   },
   methods: {
