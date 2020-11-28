@@ -15,6 +15,7 @@
       </v-row>
       <div class="py-6"></div>
       <v-row v-if="loading" justify="center" align="center">
+        サーバー起動中…
         <v-progress-circular
           :size="70"
           :width="7"
@@ -157,8 +158,14 @@
 
 <script>
 import axios from 'axios'
+import { TweenMax } from 'gsap'
+import Vue from 'vue/dist/vue.esm.js'
+import CommentArea from '@/components/CommentArea.vue'
 
 export default {
+  components: {
+    CommentArea,
+  },
   data() {
     return {
       rules: [
@@ -236,6 +243,7 @@ export default {
     // エラー発生時
     this.socket.onerror = (error) => {
       alert('エラーが発生しました\nページをリロードしてください')
+      location.reload()
     }
     // メッセージ受信
     this.socket.onmessage = (data) => {
@@ -263,12 +271,6 @@ export default {
         this.giftLog(getMessage)
       }
     }
-    // 疎通確認
-    setInterval(() => {
-      if (this.roomData != '') {
-        this.socket.send('PING	showroom')
-      }
-    }, 60000)
   },
   methods: {
     setListener() {
@@ -327,6 +329,12 @@ export default {
       this.speech = this.$store.state.voice
       console.log('読み上げ' + (this.speech ? 'する' : 'しない'))
       console.log('==setting==')
+      // 疎通確認
+      setInterval(() => {
+        if (this.roomData != '') {
+          this.socket.send('PING	showroom')
+        }
+      }, 60000)
     },
     connectSocket() {
       console.log('接続開始')
@@ -341,44 +349,53 @@ export default {
       })
     },
     async getComment(data) {
-      let niconicoText = document.createElement('div')
-      niconicoText.className = 'niconico'
-      // ID
-      niconicoText.id = 'comment' + this.commentCnt
-      this.commentCnt++
+      let id = 'comment' + this.commentCnt
 
-      niconicoText.style.left = document.documentElement.clientWidth + 'px'
-      let random = Math.round(
-        Math.random() * document.documentElement.clientHeight
-      )
-      // 見えなくなるから再度ランダム
-      while (
-        random > document.documentElement.clientHeight - 100 ||
-        random <= 20 ||
-        (this.target - 100 <= random && this.target + 100 >= random)
-      ) {
-        random = Math.round(
-          Math.random() * document.documentElement.clientHeight
-        )
+      let CommentAreaComponentClass = Vue.extend(CommentArea)
+      let commentComponent = new CommentAreaComponentClass()
+      commentComponent.$mount()
+      commentComponent.name = data.ac
+      commentComponent.comment = data.cm
+      commentComponent.avatar = data.av
+      commentComponent.id = id
+      if (this.$store.state.fontsize != null) {
+        commentComponent.fontsize = this.$store.state.fontsize - 1 + 'em'
+        console.log(this.$store.state.fontsize / 2)
+        commentComponent.nameFontSize = this.$store.state.fontsize / 2 + 'em'
+      } else {
+        commentComponent.fontsize = '4em'
+        commentComponent.nameFontSize = '2em'
       }
-      this.target = random
-      niconicoText.style.top = random + 'px'
-      niconicoText.appendChild(document.createTextNode(data.cm))
-      document.getElementsByTagName('main')[0].appendChild(niconicoText)
+
+      commentComponent.$el.setAttribute('id', id)
+
+      commentComponent.$el.style.position = 'absolute'
+      commentComponent.$el.style.left =
+        document.documentElement.clientWidth + 'px'
+
+      let he = document.documentElement.clientHeight * 0.1
+      commentComponent.$el.style.top =
+        this.getRandomNum(50, document.documentElement.clientHeight - he * 2) +
+        'px'
+      document.getElementsByTagName('main')[0].appendChild(commentComponent.$el)
 
       if (this.speech) {
         if (!/(.)\1+/.test(data.cm))
           window.speechSynthesis.speak(new SpeechSynthesisUtterance(data.cm))
       }
-
-      await gsap.to('#' + niconicoText.id, {
-        duration: 15,
+      commentComponent.$el.style.width = data.cm.length + 'em'
+      TweenMax.to('#' + id, 20, {
         x:
           -1 *
-          (document.documentElement.clientWidth + niconicoText.clientWidth),
+          (document.documentElement.clientWidth +
+            commentComponent.$el.clientWidth +
+            100),
+        onComplete: () => {
+          console.log(id)
+          commentComponent.$el.parentNode.removeChild(commentComponent.$el)
+        },
       })
-
-      niconicoText.parentNode.removeChild(niconicoText)
+      this.commentCnt++
     },
     getCount(data) {
       console.log('count')
@@ -390,7 +407,6 @@ export default {
       axios
         .get('https://niconico-showroom-api.herokuapp.com/apis/onlive')
         .then((response) => {
-          // console.log(response.data)
           if (response.data === undefined) {
             console.log('ページが存在しません')
             this.roomData = 'ページが存在しません'
@@ -487,6 +503,11 @@ export default {
           }
         }
       }
+    },
+    getRandomNum(min, max) {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+      return Math.floor(Math.random() * (max - min + 1) + min)
     },
   },
 }

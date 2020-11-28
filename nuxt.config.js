@@ -28,11 +28,6 @@ export default {
       { hid: 'og:image', property: 'og:image', content: process.env.BASE_IMG },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
-    script: [
-      {
-        src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js'
-      }
-    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
@@ -96,6 +91,10 @@ export default {
   // 動的ルーティングを行う
   generate: {
     fallback: true
+  },
+
+  server: {
+    host: '0.0.0.0'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
