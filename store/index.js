@@ -2,7 +2,9 @@ export const state = () => ({
     roomid: null,
     backgroundcolor: null,
     fontsize: null,
-    voice: null
+    voice: null,
+    telop: null,
+    fontfamily: null
 })
 
 export const mutations = {
@@ -17,5 +19,11 @@ export const mutations = {
     },
     setVoice(state, flg) {
         state.voice = flg
+    },
+    setTelop(state, speed) {
+        state.telop = speed
+    },
+    setFontFamily(state, font) {
+        state.fontfamily = font
     }
 }

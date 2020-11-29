@@ -20,14 +20,19 @@
       <div class="v-list-item__content">
         <div
           class="v-list-item__title niconico"
-          style="font-size: 2rem !important; padding-bottom: 15px"
+          :style="
+            'font-size: 2rem !important; padding-bottom: 15px; font-family: ' +
+            fontFamily
+          "
         >
           {{ name }}
         </div>
         <div class="v-list-item__subtitle">
-          <span class="niconico" :style="'font-size: ' + fontsize">{{
-            comment
-          }}</span>
+          <span
+            class="niconico"
+            :style="'font-size: ' + fontsize + '; font-family: ' + fontFamily"
+            >{{ comment }}</span
+          >
         </div>
       </div>
     </div>
@@ -43,6 +48,7 @@ export default {
       avatar: '1',
       id: '',
       fontsize: 5,
+      fontFamily: '',
       nameFontSize: 2,
     }
   },

@@ -168,10 +168,6 @@ export default {
   },
   data() {
     return {
-      rules: [
-        (value) => !!value || '入力してください',
-        (value) => (value && value.length >= 5) || '5文字以上入力してください',
-      ],
       roomData: '',
       roomId: '',
       socket: null,
@@ -181,6 +177,7 @@ export default {
         backgroundColor: '#FFFFFF',
         fontSize: '5em',
       },
+      speed: 20,
       checkbox: false,
       speech: false,
       loading: false,
@@ -194,6 +191,8 @@ export default {
       stockFreeGifts: [],
       preGifts: [],
       stockPreGifts: [],
+      top: 0,
+      fontFamily: '',
     }
   },
   head() {
@@ -320,6 +319,14 @@ export default {
       if (this.$store.state.fontsize != null) {
         this.styles.fontSize = this.$store.state.fontsize + 'em'
       }
+      if (this.$store.state.telop != null) {
+        this.speed = this.$store.state.telop
+      }
+      console.log('スピード' + this.speed)
+      if (this.$store.state.fontfamily != null) {
+        this.fontFamily = this.$store.state.fontfamily
+      }
+      console.log('フォント' + this.fontFamily)
       console.log(
         'フォントサイズ' +
           (this.$store.state.fontsize === null
@@ -335,6 +342,13 @@ export default {
           this.socket.send('PING	showroom')
         }
       }, 60000)
+      setInterval(() => {
+        axios
+          .get('https://niconico-showroom-api.herokuapp.com/apis/alive')
+          .then((response) => {
+            console.log(response.statusText)
+          })
+      }, 600000)
     },
     connectSocket() {
       console.log('接続開始')
@@ -358,9 +372,9 @@ export default {
       commentComponent.comment = data.cm
       commentComponent.avatar = data.av
       commentComponent.id = id
+      commentComponent.fontFamily = this.fontFamily
       if (this.$store.state.fontsize != null) {
         commentComponent.fontsize = this.$store.state.fontsize - 1 + 'em'
-        console.log(this.$store.state.fontsize / 2)
         commentComponent.nameFontSize = this.$store.state.fontsize / 2 + 'em'
       } else {
         commentComponent.fontsize = '4em'
@@ -374,32 +388,44 @@ export default {
         document.documentElement.clientWidth + 'px'
 
       let he = document.documentElement.clientHeight * 0.1
-      commentComponent.$el.style.top =
-        this.getRandomNum(50, document.documentElement.clientHeight - he * 2) +
-        'px'
+      let nextTop = this.getRandomNum(
+        50,
+        document.documentElement.clientHeight - he * 2
+      )
+      while (this.top + 100 > nextTop && this.top - 100 < nextTop) {
+        console.log(nextTop)
+        nextTop = this.getRandomNum(
+          50,
+          document.documentElement.clientHeight - he * 2
+        )
+      }
+      this.top = nextTop
+      commentComponent.$el.style.top = nextTop + 'px'
       document.getElementsByTagName('main')[0].appendChild(commentComponent.$el)
 
       if (this.speech) {
         if (!/(.)\1+/.test(data.cm))
           window.speechSynthesis.speak(new SpeechSynthesisUtterance(data.cm))
       }
-      commentComponent.$el.style.width = data.cm.length + 'em'
-      TweenMax.to('#' + id, 20, {
+      if (data.ac.length > data.cm.length) {
+        commentComponent.$el.style.width = data.ac.length + 'em'
+      } else {
+        commentComponent.$el.style.width = data.cm.length + 'em'
+      }
+
+      TweenMax.to('#' + id, this.speed, {
         x:
           -1 *
           (document.documentElement.clientWidth +
             commentComponent.$el.clientWidth +
             100),
         onComplete: () => {
-          console.log(id)
           commentComponent.$el.parentNode.removeChild(commentComponent.$el)
         },
       })
       this.commentCnt++
     },
-    getCount(data) {
-      console.log('count')
-    },
+    getCount(data) {},
     getRoomRandom() {
       this.btn = true
       this.loading = true
