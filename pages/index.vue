@@ -40,7 +40,8 @@
         </v-col>
       </v-row>
       <v-row v-else>
-        現在集計中のイベントはありません<br /><br />又は、00分丁度はイベント更新中なので30秒ほど経ってから再度読み込んでください<br /><br />また、1時～7時はシステム休止中です
+        分析サーバーのコストが割りに合わなかったため停止中…<br /><br />面白いから見たい、必要だって人は連絡ください<br /><br />再開するかも
+        <!-- 現在集計中のイベントはありません<br /><br />又は、00分丁度はイベント更新中なので30秒ほど経ってから再度読み込んでください<br /><br />また、1時～7時はシステム休止中です -->
       </v-row>
     </v-col>
   </v-row>
@@ -70,19 +71,19 @@ export default {
     },
   },
   mounted() {
-    this.unixTime = Math.floor(new Date().getTime() / 1000)
-    axios
-      .get(process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST)
-      .then((response) => {
-        response.data.data.forEach((element) => {
-          if (element.ended_at > this.unixTime) {
-            this.events.push(element)
-          } else {
-            this.endEvent.push(element)
-          }
-        })
-        this.loading = false
-      })
+    // this.unixTime = Math.floor(new Date().getTime() / 1000)
+    // axios
+    //   .get(process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST)
+    //   .then((response) => {
+    //     response.data.data.forEach((element) => {
+    //       if (element.ended_at > this.unixTime) {
+    //         this.events.push(element)
+    //       } else {
+    //         this.endEvent.push(element)
+    //       }
+    //     })
+    //     this.loading = false
+    //   })
   },
 }
 </script>
