@@ -354,7 +354,7 @@ export default {
           .then((response) => {
             console.log(response.statusText)
           })
-      }, 600000)
+      }, 1200000)
     },
     connectSocket() {
       console.log('接続開始')
