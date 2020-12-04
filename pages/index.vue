@@ -350,7 +350,10 @@ export default {
       }, 60000)
       setInterval(() => {
         axios
-          .get('https://niconico-showroom-api.herokuapp.com/apis/alive')
+          .get(
+            'https://niconico-showroom-api.herokuapp.com/apis/alive/' +
+              this.roomData.roomId
+          )
           .then((response) => {
             console.log(response.statusText)
           })
