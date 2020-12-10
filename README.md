@@ -1,4 +1,4 @@
-# showroom
+# showroom-comment-viewer
 
 ## Build Setup
 

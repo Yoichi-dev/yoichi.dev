@@ -1,563 +1,678 @@
 <template>
-  <v-main v-bind:style="styles">
-    <v-container class="nonecss" id="userData">
-      <div class="py-6"></div>
-      <v-row justify="center" align="center">
-        <small
-          >※配信、テストが終わった際はタブを閉じるかページをリロードしてください※</small
-        >
-      </v-row>
-      <div class="py-1"></div>
-      <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomData()" :disabled="btn">
-          自分のルームへ接続
-        </v-btn>
-      </v-row>
-      <div class="py-6"></div>
-      <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomRandom()" :disabled="btn">
-          【テスト用】ON LIVE1位の部屋に接続
-        </v-btn>
-      </v-row>
-      <div class="py-6"></div>
-      <v-row v-if="loading" justify="center" align="center">
-        サーバー起動中…
-        <v-progress-circular
-          :size="70"
-          :width="7"
-          color="green"
-          indeterminate
-        ></v-progress-circular>
-      </v-row>
-      <v-row justify="center">
-        <v-dialog v-model="commentDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="cyan" dark>
-              <v-btn icon>
-                <v-icon>mdi-comment-processing-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>コメントログ</v-toolbar-title>
-            </v-toolbar>
-            <v-list three-line>
-              <template v-for="(comment, index) in comments">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="comment.name + '' + index"
-                  :id="comment.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        comment.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="comment.name"
-                    ></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-html="comment.comment"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="freeGiftDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="green" dark>
-              <v-btn icon>
-                <v-icon>mdi-gift-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>ギフトログ（無料）</v-toolbar-title>
-            </v-toolbar>
-
-            <v-list three-line>
-              <template v-for="(freeGift, index) in freeGifts">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="freeGift.name + '' + index"
-                  :id="freeGift.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        freeGift.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="freeGift.name"
-                    ></v-list-item-title>
-                    <v-img
-                      max-height="50"
-                      max-width="50"
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
-                        freeGift.giftimg +
-                        '_s.png'
-                      "
-                    ></v-img>
-                    × {{ freeGift.count }}
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="preGiftDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="green" dark>
-              <v-btn icon>
-                <v-icon>mdi-gift-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>ギフトログ（有料）</v-toolbar-title>
-            </v-toolbar>
-
-            <v-list three-line>
-              <template v-for="(preGift, index) in preGifts">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="preGift.name + '' + index"
-                  :id="preGift.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        preGift.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="preGift.name"
-                    ></v-list-item-title>
-                    <v-img
-                      max-height="50"
-                      max-width="50"
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
-                        preGift.giftimg +
-                        '_s.png'
-                      "
-                    ></v-img>
-                    × {{ preGift.count }}
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-      </v-row>
-    </v-container>
-  </v-main>
+  <main class="pt-5">
+    <div class="row m-0 p-0 mt-1">
+      <div class="col-12 col-md-6" v-bind:style="styles">
+        <div class="row">
+          <div id="content" class="section section-device p-0">
+            <div id="iphone-x" class="p-0">
+              <div class="device device-iphone-x">
+                <div class="device-frame">
+                  <div class="bg-white radius frame-area">
+                    <div class="line-area">
+                      <div class="line-title">
+                        <div class="row" style="display: flex">
+                          <div class="col" id="now_time">time</div>
+                          <div
+                            class="col mt-1"
+                            style="display: flex; padding-left: 10em"
+                          >
+                            <svg
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-bar-chart-fill mr-2"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect width="4" height="5" x="1" y="10" rx="1" />
+                              <rect width="4" height="9" x="6" y="6" rx="1" />
+                              <rect width="4" height="14" x="11" y="1" rx="1" />
+                            </svg>
+                            <svg
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-battery-half"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M12 5H2a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM2 4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2z"
+                              />
+                              <path
+                                d="M2 6h5v4H2V6zm12.5 3.5a1.5 1.5 0 0 0 0-3v3z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="row text-center py-2">
+                          <div style="display: flex">
+                            <svg
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-chevron-left ml-1 mt-1"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+                              />
+                            </svg>
+                            <div id="room_name"></div>
+                            <!-- <svg
+                                  width="1em"
+                                  height="1em"
+                                  viewBox="0 0 16 16"
+                                  class="bi bi-telephone mt-1"
+                                  fill="currentColor"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"
+                                  />
+                                </svg> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="line-contents scroll mb-1" id="comment"></div>
+                      <div
+                        @click="scroll_btm()"
+                        id="msg-btm"
+                        class="p-2 bg-secondary"
+                        style="
+                          position: absolute;
+                          bottom: 80px;
+                          right: 40px;
+                          cursor: pointer;
+                          display: none;
+                        "
+                      >
+                        <svg
+                          width="2em"
+                          height="2em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-chevron-down text-light"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        class="line-title"
+                        style="border-radius: 0px 0px 20px 20px"
+                      >
+                        <div class="row" style="display: flex">
+                          <div class="col mt-1" style="display: flex">
+                            <svg
+                              width="2em"
+                              height="2em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-plus mr-2"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                              />
+                            </svg>
+                            <svg
+                              width="1.5em"
+                              height="1.5em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-camera-fill mt-1 mr-2"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"
+                              />
+                              <path
+                                fill-rule="evenodd"
+                                d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"
+                              />
+                            </svg>
+                            <svg
+                              width="1.5em"
+                              height="1.5em"
+                              viewBox="0 0 17 16"
+                              class="bi bi-image mt-1 mr-2"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M14.002 2h-12a1 1 0 0 0-1 1v9l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094L15.002 9.5V3a1 1 0 0 0-1-1zm-12-1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm4 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                              />
+                            </svg>
+                            <div
+                              class="input-group"
+                              style="display: flex; width: 200px"
+                            >
+                              <input
+                                type="text"
+                                style="border-radius: 1rem 0rem 0rem 1rem"
+                                class="form-control"
+                              />
+                              <span class="input-group-text"
+                                ><svg
+                                  width="1.5em"
+                                  height="1.5em"
+                                  viewBox="0 0 16 16"
+                                  class="bi bi-emoji-smile mt-1"
+                                  fill="currentColor"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                                  />
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"
+                                  />
+                                  <path
+                                    d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"
+                                  /></svg
+                              ></span>
+                            </div>
+                            <svg
+                              width="1.5em"
+                              height="1.5em"
+                              viewBox="0 0 16 16"
+                              class="bi bi-mic-fill mt-1 ml-2"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+                              <path
+                                fill-rule="evenodd"
+                                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
+                <div class="device-home"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="row mt-3">
+          <div class="mx-auto">
+            <h1 class="fw-light">LINE風SRコメントビューワーβ版</h1>
+            <p class="lead text-muted">
+              配信者向けアプリケーション<br />
+              SHOWROOMで配信中のコメントをLINE風に表示出来るWebアプリケーションになります。<br />
+              β版（レビュー版）になりますので基本的な機能しか提供していません。<br />
+              実際に使用して使用感をレビューして頂ける方の意見を取り入れて要望、機能追加を考えてます。<br />
+              また、コメント表示のデザインもLINE以外要望があれば作ります。
+            </p>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <p class="h5">自分のルームID登録</p>
+          <div class="mx-auto" id="loading" v-if="loadingRoom">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            読み込み中...
+          </div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="room-id"
+              class="form-control"
+              v-model="roomId"
+              placeholder="https://www.showroom-live.com/room/profile?room_id=XXXXXX"
+              aria-label="https://www.showroom-live.com/room/profile?room_id=XXXXXX"
+              aria-describedby="room-id"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="room-id-btn"
+              @click="check(roomId)"
+              :disabled="btnDisabled"
+            >
+              登録
+            </button>
+          </div>
+          <small
+            ><a
+              href="https://www.showroom-live.com/room/profile?room_id=317313"
+              target="_blank"
+              >例：ルームIDとは？</a
+            ></small
+          >
+        </div>
+        <div class="row mt-5">
+          <p class="h5">登録中のデータ</p>
+          <div class="mx-auto" id="loading" v-if="loadingKey">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            読み込み中...
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">ルーム名</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    @click="connectRoom()"
+                    v-if="roomData"
+                  >
+                    接続
+                  </button>
+                </td>
+                <td>{{ roomData.room_id }}</td>
+                <td>{{ roomData.room_name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row mt-5">
+          <p class="h5">背景色変更</p>
+          <div>
+            <input
+              type="color"
+              @change="saveColor()"
+              v-model="styles.backgroundColor"
+            />
+            <label for="head">{{ styles.backgroundColor }}</label>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <p class="h5">注意事項</p>
+          <p class="lead text-muted">
+            ・不具合があった際はリロードしてください<br />
+            ・サイズ変更は今の所OBS側で変えてください<br />
+            ・半角文字コメントが来たら突き抜けるかも<br />
+            ・現在調整が面倒なので1980×1080で綺麗に表示されるようになってます<br />
+            ・Google Chromeでしかテストしてません
+          </p>
+        </div>
+        <div class="row mt-5">
+          <p class="h5">追加予定機能</p>
+          <p class="lead text-muted">
+            ・特定のキーワードをスタンプ変換<br />
+            ・文字サイズ、画面サイズ調整機能<br />
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script>
 import axios from 'axios'
-import { TweenMax } from 'gsap'
-import Vue from 'vue/dist/vue.esm.js'
-import CommentArea from '@/components/CommentArea.vue'
 
 export default {
-  components: {
-    CommentArea,
-  },
   data() {
     return {
-      roomData: '',
-      roomId: '',
       socket: null,
-      btn: false,
-      commentCnt: 0,
+      roomId: '',
+      btnDisabled: false,
+      roomData: '',
       styles: {
         backgroundColor: '#FFFFFF',
-        fontSize: '5em',
       },
-      speed: 20,
-      checkbox: false,
-      speech: false,
-      loading: false,
-      target: 0,
-      commentDialog: false,
-      freeGiftDialog: false,
-      preGiftDialog: false,
-      comments: [],
-      stockComments: [],
-      freeGifts: [],
-      stockFreeGifts: [],
-      preGifts: [],
-      stockPreGifts: [],
-      top: 0,
-      fontFamily: '',
+      loadingRoom: false,
+      loadingKey: false,
     }
-  },
-  head() {
-    return {
-      title: 'ホーム',
-    }
-  },
-  watch: {
-    commentDialog: function (newValue) {
-      if (newValue) {
-        this.comments = this.stockComments
-      } else {
-        this.comments = []
-      }
-    },
-    freeGiftDialog: function (newValue) {
-      if (newValue) {
-        this.freeGifts = this.stockFreeGifts
-      } else {
-        this.freeGifts = []
-      }
-    },
-    preGiftDialog: function (newValue) {
-      if (newValue) {
-        this.preGifts = this.stockPreGifts
-      } else {
-        this.preGifts = []
-      }
-    },
-  },
-  // 離脱時
-  beforeRouteLeave(to, from, next) {
-    this.socket.close()
-    this.$nuxt.$emit('openMenu', true)
-    next()
-  },
-  created() {
-    this.setListener()
   },
   mounted() {
-    // 接続
     this.socket = new WebSocket('wss://online.showroom-live.com')
-    // 接続確認
     this.socket.onopen = (e) => {
       console.log('コネクションを開始しました')
     }
-    // エラー発生時
     this.socket.onerror = (error) => {
-      alert('エラーが発生しました\nページをリロードしてください')
+      alert('エラーが発生しました\nページをリロードします')
       location.reload()
     }
-    // メッセージ受信
     this.socket.onmessage = (data) => {
-      // 死活監視
-      if (data.data === 'ACK	showroom') {
-        console.log('死活監視OK')
-        return
-      }
-      // JSON変換
-      let getMessage = JSON.parse(
-        data.data.replace('MSG	' + this.roomData.bcsvr_key + '	', '')
-      )
-      // コメント
-      if (getMessage.cm != undefined) {
-        // カウント
-        if (Number.isFinite(Number(getMessage.cm)) && getMessage.cm <= 50) {
-          this.getCount(getMessage)
-        } else {
-          this.commentLog(getMessage)
-          this.getComment(getMessage)
+      if (data.data === 'ACK	showroom') return
+
+      try {
+        let getMessage = JSON.parse(
+          data.data.replace('MSG	' + this.roomData.bcsvr_key + '	', '')
+        )
+        if (getMessage.cm != undefined) {
+          if (Number.isFinite(Number(getMessage.cm)) && getMessage.cm <= 50) {
+            // カウント
+          } else {
+            this.addComments(getMessage)
+          }
         }
+      } catch (error) {
+        console.log('=======')
+        console.log(error)
+        console.log('=======')
       }
-      // ギフト
-      if (getMessage.g != undefined) {
-        this.giftLog(getMessage)
+    }
+
+    setInterval(() => {
+      let jikan = new Date()
+      document.getElementById('now_time').innerText = `${(
+        '0' + jikan.getHours()
+      ).slice(-2)}:${('0' + jikan.getMinutes()).slice(-2)}`
+    }, 1000)
+
+    if (this.$store.state.backgroundcolor != null) {
+      this.styles.backgroundColor = this.$store.state.backgroundcolor
+    }
+
+    if (this.$store.state.roomid != null) {
+      this.roomId = this.$store.state.roomid
+      this.check(this.roomId)
+    }
+
+    document.getElementById('comment').onscroll = () => {
+      let beforDom = document.getElementById('comment')
+      if (
+        beforDom.scrollTop + beforDom.clientHeight <
+        beforDom.scrollHeight - 300
+      ) {
+        document.getElementById('msg-btm').style.display = 'inline'
+      } else {
+        document.getElementById('msg-btm').style.display = 'none'
       }
     }
   },
   methods: {
-    setListener() {
-      this.$nuxt.$on('commentModalOpen', this.commentModalOpen)
-      this.$nuxt.$on('freeGiftModalOpen', this.freeGiftModalOpen)
-      this.$nuxt.$on('preGiftModalOpen', this.preGiftModalOpen)
-    },
-    getRoomData() {
-      if (this.$store.state.roomid === null) {
-        console.log('ID無し')
-        this.$router.push('/roomid')
+    check(inputRoomId) {
+      this.loadingRoom = true
+      if (inputRoomId === '' || inputRoomId.length < 5) {
+        console.log('validation error')
+        this.loadingRoom = false
+        return
       }
-      this.btn = true
-      this.loading = true
-      // キー取得
+      let replaceRoomId = String(inputRoomId).replace(
+        'https://www.showroom-live.com/room/profile?room_id=',
+        ''
+      )
+      this.btnDisabled = true
+
       axios
         .get(
           'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
-            this.$store.state.roomid
+            replaceRoomId
         )
         .then((response) => {
           if (response.data.room_name === undefined) {
-            console.log('ページが存在しません')
-            this.roomData = 'ページが存在しません'
-            this.btn = false
-            this.loading = false
-            return
-          }
-          // console.log(response.data)
-          this.roomData = response.data
-          if (response.data.bcsvr_key != '') {
-            this.setting()
-            this.connectSocket()
+            alert('ページが存在しません')
           } else {
-            alert('配信停止中です')
-            this.roomData = '配信停止中です'
-            this.btn = false
-            this.loading = false
+            this.roomData = response.data
+            this.roomId = replaceRoomId
+            this.$store.commit('setRoomid', replaceRoomId)
           }
         })
+        .catch((err) => {
+          alert('ページが存在しません')
+        })
+        .finally(() => {
+          this.btnDisabled = false
+          this.loadingRoom = false
+        })
     },
-    setting() {
-      this.$nuxt.$emit('closeMenu', false)
-      console.log('==setting==')
+    saveColor() {
+      console.log(this.styles.backgroundColor)
+      this.$store.commit('setBackgroundColor', this.styles.backgroundColor)
       console.log(this.$store.state.backgroundcolor)
-      this.styles.backgroundColor = this.$store.state.backgroundcolor
-      if (this.$store.state.fontsize != null) {
-        this.styles.fontSize = this.$store.state.fontsize + 'em'
-      }
-      if (this.$store.state.telop != null) {
-        this.speed = this.$store.state.telop
-      }
-      console.log('スピード' + this.speed)
-      if (this.$store.state.fontfamily != null) {
-        this.fontFamily = this.$store.state.fontfamily
-      }
-      console.log('フォント' + this.fontFamily)
-      console.log(
-        'フォントサイズ' +
-          (this.$store.state.fontsize === null
-            ? this.styles.fontSize
-            : this.$store.state.fontsize)
+    },
+    addComments(data) {
+      let dateTime = new Date(data.created_at * 1000)
+
+      let insertHTML = `
+      <div class="line-left">
+        <figure>
+          <img
+            src="https://image.showroom-cdn.com/showroom-prod/image/avatar/${
+              data.av
+            }.png"
+          />
+        </figure>
+        <div class="line-left-text">
+          <div class="name"><br />${data.ac}</div>
+          <div class="text">
+            ${data.cm}
+          </div>
+
+          <div
+            style="display: inline-block; margin-left: 0"
+            class="time"
+          >
+            <span class="time">${('0' + dateTime.getHours()).slice(-2)}:${(
+        '0' + dateTime.getMinutes()
+      ).slice(-2)}</span>
+          </div>
+        </div>
+      </div>
+      `
+      let greets = document.getElementById('comment')
+      greets.insertAdjacentHTML('beforeend', insertHTML)
+
+      let flg = true
+      let beforDom = document.getElementById('comment')
+      if (
+        beforDom.scrollTop + beforDom.clientHeight <
+        beforDom.scrollHeight - 300
       )
-      this.speech = this.$store.state.voice
-      console.log('読み上げ' + (this.speech ? 'する' : 'しない'))
-      console.log('==setting==')
-      // 疎通確認
-      setInterval(() => {
-        if (this.roomData != '') {
-          this.socket.send('PING	showroom')
-        }
-      }, 60000)
-      setInterval(() => {
-        axios
-          .get(
-            'https://niconico-showroom-api.herokuapp.com/apis/alive/' +
-              this.roomData.roomId
-          )
-          .then((response) => {
-            console.log(response.statusText)
-          })
-      }, 1200000)
-    },
-    connectSocket() {
-      console.log('接続開始')
-      this.socket.send('SUB	' + this.roomData.bcsvr_key)
-      document.getElementById('userData').style.display = 'none'
-    },
-    commentLog(data) {
-      this.stockComments.push({
-        avatar: data.av,
-        name: data.ac,
-        comment: data.cm,
-      })
-    },
-    async getComment(data) {
-      let id = 'comment' + this.commentCnt
-
-      let CommentAreaComponentClass = Vue.extend(CommentArea)
-      let commentComponent = new CommentAreaComponentClass()
-      commentComponent.$mount()
-      commentComponent.name = data.ac
-      commentComponent.comment = data.cm
-      commentComponent.avatar = data.av
-      commentComponent.id = id
-      commentComponent.fontFamily = this.fontFamily
-      if (this.$store.state.fontsize != null) {
-        commentComponent.fontsize = this.$store.state.fontsize - 1 + 'em'
-        commentComponent.nameFontSize = this.$store.state.fontsize / 2 + 'em'
-      } else {
-        commentComponent.fontsize = '4em'
-        commentComponent.nameFontSize = '2em'
+        flg = false
+      let afterDom = document.getElementById('comment')
+      if (flg) {
+        afterDom.scroll(0, afterDom.scrollHeight - afterDom.clientHeight)
+        document.getElementById('msg-btm').style.display = 'none'
       }
-
-      commentComponent.$el.setAttribute('id', id)
-
-      commentComponent.$el.style.position = 'absolute'
-      commentComponent.$el.style.left =
-        document.documentElement.clientWidth + 'px'
-
-      let he = document.documentElement.clientHeight * 0.1
-      let nextTop = this.getRandomNum(
-        50,
-        document.documentElement.clientHeight - he * 2
-      )
-      while (this.top + 100 > nextTop && this.top - 100 < nextTop) {
-        console.log(nextTop)
-        nextTop = this.getRandomNum(
-          50,
-          document.documentElement.clientHeight - he * 2
-        )
-      }
-      this.top = nextTop
-      commentComponent.$el.style.top = nextTop + 'px'
-      document.getElementsByTagName('main')[0].appendChild(commentComponent.$el)
-
-      if (this.speech) {
-        if (!/(.)\1+/.test(data.cm))
-          window.speechSynthesis.speak(new SpeechSynthesisUtterance(data.cm))
-      }
-      if (data.ac.length > data.cm.length) {
-        commentComponent.$el.style.width = data.ac.length + 'em'
-      } else {
-        commentComponent.$el.style.width = data.cm.length + 'em'
-      }
-
-      TweenMax.to('#' + id, this.speed, {
-        x:
-          -1 *
-          (document.documentElement.clientWidth +
-            commentComponent.$el.clientWidth +
-            100),
-        onComplete: () => {
-          commentComponent.$el.parentNode.removeChild(commentComponent.$el)
-        },
-      })
-      this.commentCnt++
     },
-    getCount(data) {},
-    getRoomRandom() {
-      this.btn = true
-      this.loading = true
-      // キー取得
+    scroll_btm() {
+      let afterDom = document.getElementById('comment')
+      afterDom.scroll(0, afterDom.scrollHeight - afterDom.clientHeight)
+      document.getElementById('msg-btm').style.display = 'none'
+    },
+    connectRoom() {
+      this.loadingKey = true
       axios
-        .get('https://niconico-showroom-api.herokuapp.com/apis/onlive')
+        .get(
+          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+            this.roomId
+        )
         .then((response) => {
-          if (response.data === undefined) {
-            console.log('ページが存在しません')
-            this.roomData = 'ページが存在しません'
-            this.btn = false
-            this.loading = false
-            return
-          }
-          this.roomData = response.data
-          console.log(response.data.room_name)
           if (response.data != '') {
-            this.setting()
-            this.connectSocket()
-          } else {
-            this.roomData = '配信停止中です'
-            this.btn = false
-            this.loading = false
+            if (response.data.bcsvr_key != '') {
+              document.getElementById(
+                'room_name'
+              ).innerText = this.roomData.room_name
+              this.socket.send('SUB	' + response.data.bcsvr_key)
+              setInterval(() => {
+                this.socket.send('PING	showroom')
+              }, 60000)
+              this.loadingKey = false
+            } else {
+              alert('配信停止中です')
+              this.loadingKey = false
+            }
           }
         })
-    },
-    commentModalOpen() {
-      this.commentDialog = true
-    },
-    freeGiftModalOpen() {
-      this.freeGiftDialog = true
-    },
-    preGiftModalOpen() {
-      this.preGiftDialog = true
-    },
-    giftLog(data) {
-      // TODO:要修正
-      // 有料
-      if (data.gt === 1) {
-        let flg = this.preGifts.some((value) => {
-          // ユーザを特定
-          if (value.userid === data.u && value.giftimg === data.g) {
-            // ギフト数加算
-            value.count = Number(value.count) + Number(data.n)
-            return true
-          }
-        })
-        // 新規
-        if (!flg) {
-          this.stockPreGifts.push({
-            avatar: data.av,
-            userid: data.u,
-            name: data.ac,
-            count: data.n,
-            giftimg: data.g,
-          })
-        }
-      } else {
-        // 扱いが難しい虹星
-        if (data.g === 1601) {
-          // 無料
-          let nijiflg = this.freeGifts.some((value) => {
-            // ユーザを特定
-            if (value.userid === data.u && value.giftimg === data.g) {
-              // ギフト数加算
-              value.count = Number(value.count) + Number(data.n)
-              return true
-            }
-          })
-          // 新規
-          if (!nijiflg) {
-            this.stockFreeGifts.push({
-              avatar: data.av,
-              userid: data.u,
-              name: data.ac,
-              count: data.n,
-              giftimg: data.g,
-            })
-          }
-        } else {
-          // 無料
-          let flg = this.freeGifts.some((value) => {
-            // ユーザを特定
-            if (value.userid === data.u) {
-              // ギフト数加算
-              value.count = Number(value.count) + Number(data.n)
-              // ギフトアイコン更新
-              value.giftimg = data.g
-              return true
-            }
-          })
-          // 新規
-          if (!flg) {
-            this.freeGifts.push({
-              avatar: data.av,
-              userid: data.u,
-              name: data.ac,
-              count: data.n,
-              giftimg: data.g,
-            })
-          }
-        }
-      }
-    },
-    getRandomNum(min, max) {
-      min = Math.ceil(min)
-      max = Math.floor(max)
-      return Math.floor(Math.random() * (max - min + 1) + min)
     },
   },
 }
 </script>
 
-<style scoped>
-::v-deep .niconico {
-  color: white;
-  position: fixed;
-  white-space: nowrap;
-  font-weight: bold;
-  -webkit-text-stroke: 1px #000;
+<style>
+.device {
+  margin: 1rem auto;
 }
 
-.nonecss {
-  font-size: initial;
+.radius {
+  background-color: #7494c0 !important;
+  border-radius: 40px;
+}
+
+.frame-area {
+  height: 100%;
+}
+
+.line-area {
+  border-radius: 40px 40px 20px 20px;
+  padding: 0;
+  background: #7494c0;
+  overflow: hidden;
+  margin: auto;
+  font-size: 80%;
+}
+
+.line-title {
+  background: #273246;
+  font-size: 150%;
+  color: #ffffff;
+}
+
+.scroll {
+  height: 698px;
+  overflow-y: scroll !important;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.line-contents {
+  padding: 10px;
+  overflow: hidden;
+  line-height: 135%;
+}
+
+.line-left {
+  display: inline-block;
+  position: relative;
+  display: block;
+  margin-bottom: 5px;
+  max-width: 90%;
+  clear: both;
+}
+
+.line-left figure {
+  width: 50px;
+  position: absolute;
+  top: 15px;
+  left: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.line-left figure img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.line-left .line-left-text {
+  margin-left: 60px;
+}
+
+.line-left .line-left-text .name {
+  font-weight: 500;
+  font-size: 2em;
+  line-height: 1em;
+  margin-bottom: 5px;
+  color: #ffffff;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.line-left .text {
+  margin: 0;
+  display: inline-block;
+  position: relative;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #edf1ee;
+  color: #000000;
+  font-weight: 900;
+  font-size: 2.5em;
+  line-height: 1em;
+  max-width: 97%;
+}
+
+.line-left .text::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: -10px;
+  top: 3px;
+  border-right: 20px solid #edf1ee;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transform: rotate(35deg);
+  -webkit-transform: rotate(35deg);
+}
+
+.time {
+  content: '';
+  display: inline-block;
+  width: 0px;
+  text-align: left;
+  right: 0px;
+  bottom: 0px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: white !important;
+  border: 0px solid white !important;
+  border-radius: 0rem 1rem 1rem 0rem !important;
+}
+
+#now_time {
+  padding-left: 2em;
+}
+
+#room_name {
+  width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
