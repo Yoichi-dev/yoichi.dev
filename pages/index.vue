@@ -443,9 +443,7 @@ export default {
         })
     },
     saveColor() {
-      console.log(this.styles.backgroundColor)
       this.$store.commit('setBackgroundColor', this.styles.backgroundColor)
-      console.log(this.$store.state.backgroundcolor)
     },
     addComments(data) {
       let dateTime = new Date(data.created_at * 1000)
