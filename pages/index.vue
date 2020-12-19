@@ -42,9 +42,9 @@
             </thead>
             <tbody>
               <tr v-for="(news, i) in newsLists" :key="i">
-                <td>{{ news.title }}</td>
+                <td>{{ news.title[0] }}</td>
                 <td v-html="news.content"></td>
-                <td>{{ news.date }}</td>
+                <td>{{ formatDate(news.date) }}</td>
               </tr>
             </tbody>
           </template>
@@ -188,6 +188,7 @@ import axios from 'axios'
 import { TweenMax } from 'gsap'
 import Vue from 'vue/dist/vue.esm.js'
 import CommentArea from '@/components/CommentArea.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -220,44 +221,7 @@ export default {
       stockPreGifts: [],
       top: 0,
       fontFamily: '',
-      newsLists: [
-        {
-          title: 'Update',
-          content:
-            '本WebアプリケーションPWA対応（URLバー右に表示されるインストールを押すとPCにインストールして使用できます）',
-          date: '2020/12/19 19:00',
-        },
-        {
-          title: 'Update',
-          content:
-            'すこアニフォント変更拡張機能 機能追加（フォントサイズ変更） <a href="https://chrome.google.com/webstore/detail/showroom-%E3%81%99%E3%81%93%E3%82%A2%E3%83%8B-%E4%BB%AE-%CE%B2%E7%89%88%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E5%A4%89%E6%9B%B4%E6%A9%9F/nmknohiegmphpeadmmpkfdhddedfbool" target="_blank">Chrome版</a>',
-          date: '2020/12/15 15:00',
-        },
-        {
-          title: 'Bugfix',
-          content:
-            '配信に一定期間接続していない状態で接続すると接続に失敗する問題を修正<br>　使用前に「Ctrl + F5」を押してください（初回だけでOK）',
-          date: '2020/12/12 21:30',
-        },
-        {
-          title: 'Release',
-          content:
-            'リアルLINE風コメントビューワー（β版）　<a href="https://showroom-comment-viewer.yoichi.dev/" target="_blank">https://showroom-comment-viewer.yoichi.dev/</a>',
-          date: '2020/12/10 11:00',
-        },
-        {
-          title: 'Release',
-          content:
-            '雪降らすだけのサイト　<a href="https://particles-screen.yoichi.dev/" target="_blank">https://particles-screen.yoichi.dev/</a>',
-          date: '2020/12/02 07:30',
-        },
-        {
-          title: 'Release',
-          content:
-            'スコアニのフォント変更拡張機能　<a href="https://chrome.google.com/webstore/detail/showroom-%E3%81%99%E3%81%93%E3%82%A2%E3%83%8B-%E4%BB%AE-%CE%B2%E7%89%88%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E5%A4%89%E6%9B%B4%E6%A9%9F/nmknohiegmphpeadmmpkfdhddedfbool" target="_blank">Chrome版</a>　<a href="https://addons.mozilla.org/ja/firefox/addon/showroom-%E3%81%99%E3%81%93%E3%82%A2%E3%83%8B-%E4%BB%AE-%CE%B2%E7%89%88%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E5%A4%89%E6%9B%B4-%E6%A9%9F%E8%83%BD%E5%88%B6%E9%99%90%E7%89%88/" target="_blank">Firefox版</a>',
-          date: '2020/07/14 11:00',
-        },
-      ],
+      newsLists: [],
     }
   },
   head() {
@@ -299,7 +263,24 @@ export default {
   created() {
     this.setListener()
   },
-  mounted() {},
+  mounted() {
+    // ニュース取得
+    axios
+      .get('https://yoichi.microcms.io/api/v1/news', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': process.env.MICROCMSKEY,
+        },
+      })
+      .then((response) => {
+        this.newsLists = response.data.contents
+      })
+  },
+  computed: {
+    formatDate: () => (inputDate) => {
+      return moment(inputDate).format('YYYY/MM/DD HH:mm')
+    },
+  },
   methods: {
     setListener() {
       this.$nuxt.$on('commentModalOpen', this.commentModalOpen)

@@ -88,6 +88,7 @@ export default {
     BASE_TITLE: process.env.BASE_TITLE,
     BASE_IMG: process.env.BASE_IMG,
     DESCRIPTION: process.env.DESCRIPTION_N,
+    MICROCMSKEY: process.env.MICROCMSKEY,
   },
 
   // 動的ルーティングを行う
