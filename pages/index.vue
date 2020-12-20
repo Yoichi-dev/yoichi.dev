@@ -673,7 +673,7 @@ export default {
         comment: this.commentList,
         count: this.countList,
         free: this.freeGiftList,
-        pre: this.preGiftData,
+        pre: this.preGiftList,
       }
       this.$store.commit('setHistory', history)
       this.start = null
