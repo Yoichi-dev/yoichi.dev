@@ -3,7 +3,7 @@
     <div class="row">
       <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
         <h1 class="display-6">配信日記</h1>
-        <p class="lead">配信内容を記録を保存することができます</p>
+        <p class="lead">配信内容の記録を保存することができます</p>
       </div>
     </div>
     <div class="row col-12 col-md-10 col-lg-6 mx-auto">
