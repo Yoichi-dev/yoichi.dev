@@ -1,29 +1,43 @@
 export const state = () => ({
-    roomid: null,
-    backgroundcolor: null,
-    fontsize: null,
-    voice: null,
-    telop: null,
-    fontfamily: null
+  roomid: null,
+  comment: null,
+  count: null,
+  freegift: null,
+  pregift: null,
+  history: []
 })
 
 export const mutations = {
-    setRoomid(state, id) {
-        state.roomid = id
-    },
-    setBackgroundColor(state, color) {
-        state.backgroundcolor = color
-    },
-    setFontSize(state, size) {
-        state.fontsize = size
-    },
-    setVoice(state, flg) {
-        state.voice = flg
-    },
-    setTelop(state, speed) {
-        state.telop = speed
-    },
-    setFontFamily(state, font) {
-        state.fontfamily = font
+  setRoomid(state, roomid) {
+    state.roomid = roomid
+  },
+  setComment(state, comment) {
+    state.comment = comment
+  },
+  setCount(state, count) {
+    state.count = count
+  },
+  setFreegift(state, freegift) {
+    state.freegift = freegift
+  },
+  setPregift(state, pregift) {
+    state.pregift = pregift
+  },
+  setHistory(state, data) {
+    state.history.push(data)
+  },
+  deleteHistory(state, data) {
+    state.history = data
+  },
+  reset(state, flg) {
+    if (flg) {
+      console.log('初期化')
+      state.roomid = null
+      state.comment = null
+      state.count = null
+      state.freegift = null
+      state.pregift = null
+      state.history = []
     }
+  }
 }

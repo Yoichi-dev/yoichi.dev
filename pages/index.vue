@@ -1,280 +1,432 @@
 <template>
-  <v-main v-bind:style="styles">
-    <v-container class="nonecss" id="userData">
-      <div class="py-6"></div>
-      <v-row justify="center" align="center">
-        <p>
-          ※配信、テストが終わった際はタブを閉じるかページをリロードしてください※
-        </p>
-      </v-row>
-      <div class="py-1"></div>
-      <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomData()" :disabled="btn">
-          自分のルームへ接続
-        </v-btn>
-      </v-row>
-      <div class="py-6"></div>
-      <v-row justify="center" align="center">
-        <v-btn outlined color="indigo" @click="getRoomRandom()" :disabled="btn">
-          【テスト用】ON LIVE1位の部屋に接続
-        </v-btn>
-      </v-row>
-      <div class="py-6"></div>
-      <v-row v-if="loading" justify="center" align="center">
-        サーバー起動中…
-        <v-progress-circular
-          :size="70"
-          :width="7"
-          color="green"
-          indeterminate
-        ></v-progress-circular>
-      </v-row>
-      <div class="py-6"></div>
-      <v-row justify="center" align="center">
-        <v-simple-table>
-          <template v-slot:default>
+  <div class="container">
+    <div class="row">
+      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-6">配信日記</h1>
+        <p class="lead">配信内容を記録を保存することができます</p>
+      </div>
+    </div>
+    <div class="row col-12 col-md-10 col-lg-6 mx-auto">
+      <div class="mx-auto" id="loading" v-if="loadingRoom">
+        <div class="spinner-border text-success" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        読み込み中...
+      </div>
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          v-model="roomId"
+          placeholder="https://www.showroom-live.com/room/profile?room_id="
+          aria-label="RoomId"
+          aria-describedby="room-id"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          @click="check(roomId)"
+          :disabled="btnDisabled"
+          type="button"
+          id="room-id"
+        >
+          登録
+        </button>
+      </div>
+      <small
+        ><a
+          href="https://www.showroom-live.com/room/profile?room_id=317313"
+          target="_blank"
+          rel="noopener"
+          >例：ルームIDとは？</a
+        ></small
+      >
+    </div>
+    <div class="mt-5 row col-12 col-md-10 col-lg-6 mx-auto">
+      <p class="h5">登録中のルーム</p>
+      <div class="mx-auto" id="loading" v-if="loadingKey">
+        <div class="spinner-border text-success" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        読み込み中...
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">ルーム名</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                @click="getStreamKey()"
+                v-if="streamBtnDisabled && this.roomData"
+              >
+                接続
+              </button>
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                @click="end()"
+                v-if="!streamBtnDisabled"
+              >
+                配信終了
+              </button>
+            </td>
+            <td>{{ roomData.room_id }}</td>
+            <td>{{ roomData.room_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-5 row col-12 col-md-10 col-lg-6 mx-auto" v-if="history">
+      <p class="h5">履歴一覧</p>
+      <a
+        @click="$router.push('/history')"
+        rel="noopener"
+        class="btn btn-outline-primary col-12 col-md-10 col-lg-6 mx-auto"
+        >一覧を見る</a
+      >
+    </div>
+    <div class="mt-5 row col-12 col-md-10 col-lg-6 mx-auto">
+      コメント件数： {{ commentList.length }}件<br />
+      <!-- カウント人数： {{ countList.length }}人<br /> -->
+      フリーギフト人数：{{ freeGiftList.length }}人<br />
+      有料ギフト人数：{{ preGiftList.length }}人<br />
+      <button
+        v-if="!streamBtnDisabled"
+        class="btn btn-outline-danger"
+        type="button"
+        disabled
+      >
+        <span
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        記録中……
+      </button>
+    </div>
+    <div class="mt-5 row col-12 col-md-10 col-lg-6 mx-auto" v-if="tabShow">
+      <button type="button" class="btn btn-outline-primary" @click="save()">
+        この内容を保存する
+      </button>
+    </div>
+    <div class="mt-5 mb-5 row col-12 mx-auto" v-if="tabShow">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-link active"
+            id="nav-comment-tab"
+            data-bs-toggle="tab"
+            href="#nav-comment"
+            role="tab"
+            aria-controls="nav-comment"
+            aria-selected="true"
+            >コメント</a
+          >
+          <!-- <a
+            class="nav-link"
+            id="nav-count-tab"
+            data-bs-toggle="tab"
+            href="#nav-count"
+            role="tab"
+            aria-controls="nav-count"
+            aria-selected="false"
+            >カウント</a
+          > -->
+          <a
+            class="nav-link"
+            id="nav-free-gift-tab"
+            data-bs-toggle="tab"
+            href="#nav-free-gift"
+            role="tab"
+            aria-controls="nav-free-gift"
+            aria-selected="false"
+            >フリーギフト</a
+          >
+          <a
+            class="nav-link"
+            id="nav-pre-gift-tab"
+            data-bs-toggle="tab"
+            href="#nav-pre-gift"
+            role="tab"
+            aria-controls="nav-pre-gift"
+            aria-selected="false"
+            >有料ギフト</a
+          >
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div
+          class="tab-pane fade show active"
+          id="nav-comment"
+          role="tabpanel"
+          aria-labelledby="nav-comment-tab"
+        >
+          <table class="table">
             <thead>
               <tr>
-                <th class="text-left">News</th>
-                <th class="text-left"></th>
-                <th class="text-left"></th>
+                <th scope="col">#</th>
+                <th scope="col">ユーザ名</th>
+                <th scope="col">コメント</th>
+                <th scope="col">日時</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(news, i) in newsLists" :key="i">
-                <td>{{ news.title[0] }}</td>
-                <td v-html="news.content"></td>
-                <td>{{ formatDate(news.date) }}</td>
+              <tr v-for="(comment, i) in commentList" :key="i">
+                <th scope="row">
+                  <a
+                    target="_blank"
+                    class="btn btn-outline-secondary"
+                    rel="nofollow"
+                    :href="
+                      'https://www.showroom-live.com/social/twitter/redirect_to_twitter?user_id=' +
+                      comment.user_id
+                    "
+                    >SNS</a
+                  >
+                </th>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                      comment.avatar +
+                      '.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />{{ comment.user_name }}
+                </td>
+                <td>{{ comment.comment }}</td>
+                <td>{{ formatDate(comment.create * 1000) }}</td>
               </tr>
+              <tr></tr>
             </tbody>
-          </template>
-        </v-simple-table>
-      </v-row>
-      <v-row justify="center">
-        <v-dialog v-model="commentDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="cyan" dark>
-              <v-btn icon>
-                <v-icon>mdi-comment-processing-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>コメントログ</v-toolbar-title>
-            </v-toolbar>
-            <v-list three-line>
-              <template v-for="(comment, index) in comments">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="comment.name + '' + index"
-                  :id="comment.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        comment.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="comment.name"
-                    ></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-html="comment.comment"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="freeGiftDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="green" dark>
-              <v-btn icon>
-                <v-icon>mdi-gift-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>ギフトログ（無料）</v-toolbar-title>
-            </v-toolbar>
-
-            <v-list three-line>
-              <template v-for="(freeGift, index) in freeGifts">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="freeGift.name + '' + index"
-                  :id="freeGift.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        freeGift.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="freeGift.name"
-                    ></v-list-item-title>
-                    <v-img
-                      max-height="50"
-                      max-width="50"
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
-                        freeGift.giftimg +
-                        '_s.png'
-                      "
-                    ></v-img>
-                    × {{ freeGift.count }}
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="preGiftDialog" scrollable max-width="500px">
-          <v-card max-width="800px" class="mx-auto">
-            <v-toolbar color="green" dark>
-              <v-btn icon>
-                <v-icon>mdi-gift-outline</v-icon>
-              </v-btn>
-              <v-toolbar-title>ギフトログ（有料）</v-toolbar-title>
-            </v-toolbar>
-
-            <v-list three-line>
-              <template v-for="(preGift, index) in preGifts">
-                <v-divider :key="index" inset></v-divider>
-                <v-list-item
-                  :key="preGift.name + '' + index"
-                  :id="preGift.name + '' + index"
-                >
-                  <v-list-item-avatar>
-                    <v-img
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
-                        preGift.avatar +
-                        '.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="preGift.name"
-                    ></v-list-item-title>
-                    <v-img
-                      max-height="50"
-                      max-width="50"
-                      :src="
-                        'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
-                        preGift.giftimg +
-                        '_s.png'
-                      "
-                    ></v-img>
-                    × {{ preGift.count }}
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-card>
-        </v-dialog>
-      </v-row>
-    </v-container>
-  </v-main>
+          </table>
+        </div>
+        <!-- <div
+          class="tab-pane fade"
+          id="nav-count"
+          role="tabpanel"
+          aria-labelledby="nav-count-tab"
+        >
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ユーザ名</th>
+                <th scope="col">カウント</th>
+                <th scope="col">日時</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(count, i) in countList" :key="i">
+                <th scope="row">
+                  <a
+                    target="_blank"
+                    class="btn btn-outline-secondary"
+                    rel="nofollow"
+                    :href="
+                      'https://www.showroom-live.com/social/twitter/redirect_to_twitter?user_id=' +
+                      count.user_id
+                    "
+                    >SNS</a
+                  >
+                </th>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                      count.avatar +
+                      '.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />{{ count.user_name }}
+                </td>
+                <td>{{ count.comment }}</td>
+                <td>{{ formatDate(count.create * 1000) }}</td>
+              </tr>
+              <tr></tr>
+            </tbody>
+          </table>
+        </div> -->
+        <div
+          class="tab-pane fade"
+          id="nav-free-gift"
+          role="tabpanel"
+          aria-labelledby="nav-free-gift-tab"
+        >
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ユーザ名</th>
+                <th scope="col">ギフト</th>
+                <th scope="col">日時</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(freeGift, i) in freeGiftList" :key="i">
+                <th scope="row">
+                  <a
+                    target="_blank"
+                    class="btn btn-outline-secondary"
+                    rel="nofollow"
+                    :href="
+                      'https://www.showroom-live.com/social/twitter/redirect_to_twitter?user_id=' +
+                      freeGift.user_id
+                    "
+                    >SNS</a
+                  >
+                </th>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                      freeGift.avatar +
+                      '.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />
+                  {{ freeGift.user_name }}
+                </td>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
+                      freeGift.gift_img +
+                      '_s.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />
+                  × {{ freeGift.count }}個
+                </td>
+                <td>{{ formatDate(freeGift.create * 1000) }}</td>
+              </tr>
+              <tr></tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="nav-pre-gift"
+          role="tabpanel"
+          aria-labelledby="nav-pre-gift-tab"
+        >
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ユーザ名</th>
+                <th scope="col">ギフト</th>
+                <th scope="col">日時</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(preGift, i) in preGiftList" :key="i">
+                <th scope="row">
+                  <a
+                    target="_blank"
+                    class="btn btn-outline-secondary"
+                    rel="nofollow"
+                    :href="
+                      'https://www.showroom-live.com/social/twitter/redirect_to_twitter?user_id=' +
+                      preGift.user_id
+                    "
+                    >SNS</a
+                  >
+                </th>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/image/avatar/' +
+                      preGift.avatar +
+                      '.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />
+                  {{ preGift.user_name }}
+                </td>
+                <td>
+                  <img
+                    style="max-width: 50px; max-height: 50px"
+                    :src="
+                      'https://image.showroom-cdn.com/showroom-prod/assets/img/gift/' +
+                      preGift.gift_img +
+                      '_s.png'
+                    "
+                    class="card-img-top"
+                    alt=""
+                  />
+                  × {{ preGift.count }}個
+                </td>
+                <td>{{ formatDate(preGift.create * 1000) }}</td>
+              </tr>
+              <tr></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="my-5"></div>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { TweenMax } from 'gsap'
-import Vue from 'vue/dist/vue.esm.js'
-import CommentArea from '@/components/CommentArea.vue'
 import moment from 'moment'
 
 export default {
-  components: {
-    CommentArea,
-  },
   data() {
     return {
-      roomData: '',
-      roomId: '',
       socket: null,
-      btn: false,
-      commentCnt: 0,
-      styles: {
-        backgroundColor: '#FFFFFF',
-        fontSize: '5em',
-      },
-      speed: 20,
-      checkbox: false,
-      speech: false,
-      loading: false,
-      target: 0,
-      commentDialog: false,
-      freeGiftDialog: false,
-      preGiftDialog: false,
-      comments: [],
-      stockComments: [],
-      freeGifts: [],
-      stockFreeGifts: [],
-      preGifts: [],
-      stockPreGifts: [],
-      top: 0,
-      fontFamily: '',
-      newsLists: [],
+      roomId: '',
+      btnDisabled: false,
+      streamBtnDisabled: true,
+      roomData: '',
+      loadingRoom: false,
+      loadingKey: false,
+      start: null,
+      commentList: [],
+      countList: [],
+      freeGiftList: [],
+      preGiftList: [],
+      tabShow: false,
+      history: false,
     }
-  },
-  head() {
-    return {
-      title: 'ホーム',
-    }
-  },
-  watch: {
-    commentDialog: function (newValue) {
-      if (newValue) {
-        this.comments = this.stockComments
-      } else {
-        this.comments = []
-      }
-    },
-    freeGiftDialog: function (newValue) {
-      if (newValue) {
-        this.freeGifts = this.stockFreeGifts
-      } else {
-        this.freeGifts = []
-      }
-    },
-    preGiftDialog: function (newValue) {
-      if (newValue) {
-        this.preGifts = this.stockPreGifts
-      } else {
-        this.preGifts = []
-      }
-    },
   },
   // 離脱時
   beforeRouteLeave(to, from, next) {
     if (this.socket != null) {
       this.socket.close()
     }
-    this.$nuxt.$emit('openMenu', true)
     next()
   },
-  created() {
-    this.setListener()
-  },
   mounted() {
-    // ニュース取得
-    axios
-      .get('https://yoichi.microcms.io/api/v1/news', {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-KEY': process.env.MICROCMSKEY,
-        },
-      })
-      .then((response) => {
-        this.newsLists = response.data.contents
-      })
+    setTimeout(() => {
+      // this.$store.commit('reset', true)
+      if (this.$store.state.roomid != null) {
+        this.roomId = this.$store.state.roomid
+        this.check(this.roomId)
+      }
+      if (this.$store.state.history.length != 0) {
+        this.history = true
+      }
+    }, 0)
   },
   computed: {
     formatDate: () => (inputDate) => {
@@ -282,321 +434,259 @@ export default {
     },
   },
   methods: {
-    setListener() {
-      this.$nuxt.$on('commentModalOpen', this.commentModalOpen)
-      this.$nuxt.$on('freeGiftModalOpen', this.freeGiftModalOpen)
-      this.$nuxt.$on('preGiftModalOpen', this.preGiftModalOpen)
-    },
-    getRoomData() {
-      if (this.$store.state.roomid === null) {
-        console.log('ID無し')
-        this.$router.push('/roomid')
+    check(inputRoomId) {
+      this.loadingRoom = true
+      if (inputRoomId === '' || inputRoomId.length < 5) {
+        console.log('validation error')
+        this.loadingRoom = false
+        return
       }
-      this.btn = true
-      this.loading = true
-      // キー取得
+      let replaceRoomId = String(inputRoomId).replace(
+        'https://www.showroom-live.com/room/profile?room_id=',
+        ''
+      )
+      this.btnDisabled = true
+
       axios
         .get(
           'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
-            this.$store.state.roomid
+            replaceRoomId
         )
         .then((response) => {
           if (response.data.room_name === undefined) {
-            console.log('ページが存在しません')
-            this.roomData = 'ページが存在しません'
-            this.btn = false
-            this.loading = false
-            return
-          }
-          this.roomData = response.data
-          if (response.data.bcsvr_key != '') {
-            this.setting()
-            this.connectSocket()
+            alert('ページが存在しません')
           } else {
-            alert('配信停止中です')
-            this.roomData = '配信停止中です'
-            this.btn = false
-            this.loading = false
+            this.roomData = response.data
+            this.roomId = replaceRoomId
+            this.$store.commit('setRoomid', replaceRoomId)
           }
         })
+        .catch((err) => {
+          alert('ページが存在しません')
+        })
+        .finally(() => {
+          this.btnDisabled = false
+          this.loadingRoom = false
+        })
     },
-    setting() {
-      this.$nuxt.$emit('closeMenu', false)
-      console.log('==setting==')
-      console.log(this.$store.state.backgroundcolor)
-      this.styles.backgroundColor = this.$store.state.backgroundcolor
-      if (this.$store.state.fontsize != null) {
-        this.styles.fontSize = this.$store.state.fontsize + 'em'
+    addComments(data) {
+      let comment = {
+        start: this.start,
+        user_id: data.u,
+        user_name: data.ac,
+        comment: data.cm,
+        avatar: data.av,
+        flg: data.ua,
+        create: data.created_at,
+        at: data.at,
+        d: data.d,
+        t: data.t,
       }
-      if (this.$store.state.telop != null) {
-        this.speed = this.$store.state.telop
+      this.commentList.push(comment)
+      this.$store.commit('setComment', JSON.stringify(this.commentList))
+    },
+    async addCount(data) {
+      let flg = true
+      let countData = {
+        start: this.start,
+        user_id: data.u,
+        user_name: data.ac,
+        comment: data.cm,
+        avatar: data.av,
+        flg: data.ua,
+        create: data.created_at,
+        at: data.at,
+        d: data.d,
+        t: data.t,
       }
-      console.log('スピード' + this.speed)
-      if (this.$store.state.fontfamily != null) {
-        this.fontFamily = this.$store.state.fontfamily
-      }
-      console.log('フォント' + this.fontFamily)
-      console.log(
-        'フォントサイズ' +
-          (this.$store.state.fontsize === null
-            ? this.styles.fontSize
-            : this.$store.state.fontsize)
-      )
-      this.speech = this.$store.state.voice
-      console.log('読み上げ' + (this.speech ? 'する' : 'しない'))
-      console.log('==setting==')
-      // 疎通確認
-      setInterval(() => {
-        if (this.roomData != '') {
-          this.socket.send('PING	showroom')
+      for (let i = 0; i < this.countList.length; i++) {
+        if (this.countList[i].user_id === countData.user_id) {
+          this.countList[i].comment = countData.comment
+          flg = false
         }
-      }, 60000)
-      setInterval(() => {
-        axios
-          .get(
-            'https://niconico-showroom-api.herokuapp.com/apis/alive/' +
-              this.roomData.roomId
-          )
-          .then((response) => {
-            console.log(response.statusText)
-          })
-      }, 1200000)
-    },
-    connectSocket() {
-      console.log('接続開始')
-      // 接続
-      this.socket = new WebSocket('wss://online.showroom-live.com')
-      // 接続確認
-      this.socket.onopen = (e) => {
-        console.log('コネクションを開始しました')
-        this.socket.send('SUB	' + this.roomData.bcsvr_key)
-        document.getElementById('userData').style.display = 'none'
       }
-      // エラー発生時
+      if (flg) {
+        this.countList.push(countData)
+      }
+      await this.$store.commit('setCount', JSON.stringify(this.countList))
+    },
+    async addFreeGifts(data) {
+      let flg = true
+      let freeGiftData = {
+        start: this.start,
+        user_id: data.u,
+        user_name: data.ac,
+        avatar: data.av,
+        count: data.n,
+        gift_img: data.g,
+        flg: data.ua,
+        create: data.created_at,
+        at: data.at,
+        d: data.d,
+        gt: data.gt,
+        h: data.h,
+        t: data.t,
+      }
+
+      for (let i = 0; i < this.freeGiftList.length; i++) {
+        if (this.freeGiftList[i].user_id === freeGiftData.user_id) {
+          this.freeGiftList[i].count += freeGiftData.count
+          this.freeGiftList[i].gift_img = freeGiftData.gift_img
+          flg = false
+        }
+      }
+      if (flg) {
+        this.freeGiftList.push(freeGiftData)
+      }
+      await this.$store.commit('setFreegift', JSON.stringify(this.freeGiftList))
+    },
+    async addPreGifts(data) {
+      let flg = true
+      let preGiftData = {
+        start: this.start,
+        user_id: data.u,
+        user_name: data.ac,
+        avatar: data.av,
+        count: data.n,
+        gift_img: data.g,
+        flg: data.ua,
+        create: data.created_at,
+        at: data.at,
+        d: data.d,
+        gt: data.gt,
+        h: data.h,
+        t: data.t,
+      }
+
+      for (let i = 0; i < this.preGiftList.length; i++) {
+        if (
+          this.preGiftList[i].user_id === preGiftData.user_id &&
+          this.preGiftList[i].gift_img === preGiftData.gift_img
+        ) {
+          this.preGiftList[i].count += preGiftData.count
+          flg = false
+        }
+      }
+      if (flg) {
+        this.preGiftList.push(preGiftData)
+      }
+      await this.$store.commit('setPregift', JSON.stringify(this.preGiftList))
+    },
+    getStreamKey() {
+      this.loadingKey = true
+      axios
+        .get(
+          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+            this.roomId
+        )
+        .then((response) => {
+          if (response.data != '') {
+            if (response.data.bcsvr_key != '') {
+              this.roomData = response.data
+              this.connectRoom(response.data.bcsvr_key)
+            } else {
+              alert('配信停止中です')
+            }
+          }
+        })
+        .finally(() => {
+          this.loadingKey = false
+        })
+    },
+    connectRoom(key) {
+      let date = new Date()
+      let time = date.getTime()
+      this.start = Math.floor(time / 1000)
+
+      this.socket = new WebSocket('wss://online.showroom-live.com')
+      this.socket.onopen = (e) => {
+        this.socket.send('SUB	' + key)
+        setInterval(() => {
+          if (this.socket != null) {
+            this.socket.send('PING	showroom')
+          }
+        }, 60000)
+        this.streamBtnDisabled = false
+        this.tabShow = false
+        this.history = false
+      }
+      this.socket.onclose = (e) => {
+        console.log('接続が切断されました')
+        this.socket = null
+      }
       this.socket.onerror = (error) => {
-        alert('エラーが発生しました\nページをリロードしてください')
+        alert('エラーが発生しました\nページをリロードします')
         location.reload()
       }
-      // メッセージ受信
       this.socket.onmessage = (data) => {
-        // 死活監視
-        if (data.data === 'ACK	showroom') {
-          console.log('死活監視OK')
-          return
-        }
-        // JSON変換
-        let getMessage = JSON.parse(
-          data.data.replace('MSG	' + this.roomData.bcsvr_key + '	', '')
-        )
-        // コメント
-        if (getMessage.cm != undefined) {
-          // カウント
-          if (Number.isFinite(Number(getMessage.cm)) && getMessage.cm <= 50) {
-            this.getCount(getMessage)
-          } else {
-            this.commentLog(getMessage)
-            this.getComment(getMessage)
-          }
-        }
-        // ギフト
-        if (getMessage.g != undefined) {
-          this.giftLog(getMessage)
-        }
-      }
-    },
-    commentLog(data) {
-      this.stockComments.push({
-        avatar: data.av,
-        name: data.ac,
-        comment: data.cm,
-      })
-    },
-    async getComment(data) {
-      let id = 'comment' + this.commentCnt
+        if (data.data === 'ACK	showroom') return
 
-      let CommentAreaComponentClass = Vue.extend(CommentArea)
-      let commentComponent = new CommentAreaComponentClass()
-      commentComponent.$mount()
-      commentComponent.name = data.ac
-      commentComponent.comment = data.cm
-      commentComponent.avatar = data.av
-      commentComponent.id = id
-      commentComponent.fontFamily = this.fontFamily
-      if (this.$store.state.fontsize != null) {
-        commentComponent.fontsize = this.$store.state.fontsize - 1 + 'em'
-        commentComponent.nameFontSize = this.$store.state.fontsize / 2 + 'em'
-      } else {
-        commentComponent.fontsize = '4em'
-        commentComponent.nameFontSize = '2em'
-      }
-
-      commentComponent.$el.setAttribute('id', id)
-
-      commentComponent.$el.style.position = 'absolute'
-      commentComponent.$el.style.left =
-        document.documentElement.clientWidth + 'px'
-
-      let he = document.documentElement.clientHeight * 0.1
-      let nextTop = this.getRandomNum(
-        50,
-        document.documentElement.clientHeight - he * 2
-      )
-      while (this.top + 100 > nextTop && this.top - 100 < nextTop) {
-        nextTop = this.getRandomNum(
-          50,
-          document.documentElement.clientHeight - he * 2
-        )
-      }
-      this.top = nextTop
-      commentComponent.$el.style.top = nextTop + 'px'
-      document.getElementsByTagName('main')[0].appendChild(commentComponent.$el)
-
-      if (this.speech) {
-        if (!/(.)\1+/.test(data.cm))
-          window.speechSynthesis.speak(new SpeechSynthesisUtterance(data.cm))
-      }
-      if (data.ac.length > data.cm.length) {
-        commentComponent.$el.style.width = data.ac.length + 'em'
-      } else {
-        commentComponent.$el.style.width = data.cm.length + 'em'
-      }
-
-      TweenMax.to('#' + id, this.speed, {
-        x:
-          -1 *
-          (document.documentElement.clientWidth +
-            commentComponent.$el.clientWidth +
-            100),
-        onComplete: () => {
-          commentComponent.$el.parentNode.removeChild(commentComponent.$el)
-        },
-      })
-      this.commentCnt++
-    },
-    getCount(data) {},
-    getRoomRandom() {
-      this.btn = true
-      this.loading = true
-      // キー取得
-      axios
-        .get('https://niconico-showroom-api.herokuapp.com/apis/onlive')
-        .then((response) => {
-          if (response.data === undefined) {
-            console.log('ページが存在しません')
-            this.roomData = 'ページが存在しません'
-            this.btn = false
-            this.loading = false
-            return
-          }
-          this.roomData = response.data
-          console.log(response.data.room_name)
-          if (response.data != '') {
-            this.setting()
-            this.connectSocket()
-          } else {
-            this.roomData = '配信停止中です'
-            this.btn = false
-            this.loading = false
-          }
-        })
-    },
-    commentModalOpen() {
-      this.commentDialog = true
-    },
-    freeGiftModalOpen() {
-      this.freeGiftDialog = true
-    },
-    preGiftModalOpen() {
-      this.preGiftDialog = true
-    },
-    giftLog(data) {
-      // TODO:要修正
-      // 有料
-      if (data.gt === 1) {
-        let flg = this.preGifts.some((value) => {
-          // ユーザを特定
-          if (value.userid === data.u && value.giftimg === data.g) {
-            // ギフト数加算
-            value.count = Number(value.count) + Number(data.n)
-            return true
-          }
-        })
-        // 新規
-        if (!flg) {
-          this.stockPreGifts.push({
-            avatar: data.av,
-            userid: data.u,
-            name: data.ac,
-            count: data.n,
-            giftimg: data.g,
-          })
-        }
-      } else {
-        // 扱いが難しい虹星
-        if (data.g === 1601) {
-          // 無料
-          let nijiflg = this.freeGifts.some((value) => {
-            // ユーザを特定
-            if (value.userid === data.u && value.giftimg === data.g) {
-              // ギフト数加算
-              value.count = Number(value.count) + Number(data.n)
-              return true
+        try {
+          let getMessage = JSON.parse(
+            data.data.replace('MSG	' + this.roomData.bcsvr_key + '	', '')
+          )
+          if (getMessage.cm != undefined) {
+            if (Number.isFinite(Number(getMessage.cm)) && getMessage.cm <= 50) {
+              this.addCount(getMessage)
+            } else {
+              this.addComments(getMessage)
             }
-          })
-          // 新規
-          if (!nijiflg) {
-            this.stockFreeGifts.push({
-              avatar: data.av,
-              userid: data.u,
-              name: data.ac,
-              count: data.n,
-              giftimg: data.g,
-            })
           }
-        } else {
-          // 無料
-          let flg = this.freeGifts.some((value) => {
-            // ユーザを特定
-            if (value.userid === data.u) {
-              // ギフト数加算
-              value.count = Number(value.count) + Number(data.n)
-              // ギフトアイコン更新
-              value.giftimg = data.g
-              return true
+          // ギフト
+          if (getMessage.g != undefined) {
+            if (getMessage.gt === 1) {
+              // 有料
+              this.addPreGifts(getMessage)
+            } else {
+              // 無料
+              this.addFreeGifts(getMessage)
             }
-          })
-          // 新規
-          if (!flg) {
-            this.freeGifts.push({
-              avatar: data.av,
-              userid: data.u,
-              name: data.ac,
-              count: data.n,
-              giftimg: data.g,
-            })
           }
+        } catch (error) {
+          console.log('=======')
+          console.log(error)
+          console.log('=======')
         }
       }
     },
-    getRandomNum(min, max) {
-      min = Math.ceil(min)
-      max = Math.floor(max)
-      return Math.floor(Math.random() * (max - min + 1) + min)
+    end() {
+      this.streamBtnDisabled = true
+      this.socket.close()
+      this.tabShow = true
+      setTimeout(() => {
+        let triggerTabList = [].slice.call(
+          document.querySelectorAll('#nav-tab a')
+        )
+        triggerTabList.forEach(function (triggerEl) {
+          let tabTrigger = new bootstrap.Tab(triggerEl)
+
+          triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+          })
+        })
+      }, 0)
+    },
+    save() {
+      let history = {
+        date: this.start,
+        comment: this.commentList,
+        count: this.countList,
+        free: this.freeGiftList,
+        pre: this.preGiftData,
+      }
+      this.$store.commit('setHistory', history)
+      this.start = null
+      this.commentList = []
+      this.countList = []
+      this.freeGiftList = []
+      this.preGiftList = []
+      this.tabShow = false
+      this.history = true
     },
   },
 }
 </script>
 
-<style scoped>
-::v-deep .niconico {
-  color: white;
-  position: fixed;
-  white-space: nowrap;
-  font-weight: bold;
-  -webkit-text-stroke: 1px #000;
-}
-
-.nonecss {
-  font-size: initial;
-}
+<style>
 </style>
