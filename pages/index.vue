@@ -128,6 +128,12 @@ export default {
         })
         this.loading = false
       })
+
+    axios
+      .get(
+        'https://niconico-showroom-api.herokuapp.com/analyze/showroom-event-analyzer'
+      )
+      .then((response) => {})
   },
 }
 </script>
