@@ -97,6 +97,9 @@ export default {
   head() {
     return {
       title: 'ホーム',
+      htmlAttrs: {
+        lang: 'ja',
+      },
     }
   },
   computed: {

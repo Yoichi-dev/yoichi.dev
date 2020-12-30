@@ -264,6 +264,9 @@ export default {
   head() {
     return {
       title: this.eventData.event_name,
+      htmlAttrs: {
+        lang: 'ja',
+      },
     }
   },
   mounted() {

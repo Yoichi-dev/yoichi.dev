@@ -11,6 +11,9 @@ export default {
   head() {
     return {
       title: 'イベント追加',
+      htmlAttrs: {
+        lang: 'ja',
+      },
     }
   },
 }
