@@ -1,6 +1,8 @@
 <template>
   <v-row justify="center" align="center">
-    <h1 class="text-h5 mt-10">集計イベント追加機能鋭意制作中…</h1>
+    <h1 class="text-h5 mt-10">
+      追加して欲しいイベントがある際は個別にご連絡ください
+    </h1>
   </v-row>
 </template>
 

@@ -1,15 +1,16 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" md="10">
-      <v-row>
+      <v-row class="mt-10">
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">本日の時間別ポイント集計</p>
+              <p class="display-1 text--primary">全期間ポイント集計</p>
+              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="pointChartdata"
+              :chartdata="allPointChartdata"
               :options="pointOptions"
               :height="height"
             />
@@ -20,11 +21,12 @@
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">本日の時間別フォロワー遷移</p>
+              <p class="display-1 text--primary">全期間フォロワー遷移</p>
+              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="followerChartdata"
+              :chartdata="allFollowerChartdata"
               :options="followerOptions"
               :height="height"
             />
@@ -35,11 +37,12 @@
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">本日の時間別順位遷移</p>
+              <p class="display-1 text--primary">全期間順位遷移</p>
+              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="rankChartdata"
+              :chartdata="allRankChartdata"
               :options="rankOptions"
               :height="height"
             />
@@ -93,16 +96,15 @@
         </v-col>
       </v-row>
 
-      <v-row class="mt-10">
+      <v-row>
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">全期間ポイント集計</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <p class="display-1 text--primary">本日の時間別ポイント集計</p>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="allPointChartdata"
+              :chartdata="pointChartdata"
               :options="pointOptions"
               :height="height"
             />
@@ -113,12 +115,11 @@
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">全期間フォロワー遷移</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <p class="display-1 text--primary">本日の時間別フォロワー遷移</p>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="allFollowerChartdata"
+              :chartdata="followerChartdata"
               :options="followerOptions"
               :height="height"
             />
@@ -129,12 +130,11 @@
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <p class="display-1 text--primary">全期間順位遷移</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <p class="display-1 text--primary">本日の時間別順位遷移</p>
             </v-card-text>
             <Chart
               v-if="loaded"
-              :chartdata="allRankChartdata"
+              :chartdata="rankChartdata"
               :options="rankOptions"
               :height="height"
             />
