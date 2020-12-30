@@ -41,9 +41,7 @@
       </v-row>
       <v-row v-else>
         <!-- 分析サーバーのコストが割りに合わなかったため停止中…<br /><br />面白いから見たい、必要だって人は連絡ください<br /><br />再開するかも -->
-        現在集計中のイベントはありません<br /><br /><span class="red--text"
-          >回線が遅い場合(?)正しく表示できません(バグ修正中)</span
-        ><br /><br />また、1時～7時はシステム休止中です
+        現在集計中のイベントはありません<br /><br />また、1時～7時はシステム休止中です
       </v-row>
     </v-col>
 
@@ -86,6 +84,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import firebase from '@/plugins/firebase'
 
 export default {
   data() {
@@ -112,22 +111,50 @@ export default {
   mounted() {
     this.unixTime = Math.floor(new Date().getTime() / 1000)
 
-    axios
-      .get(
-        process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST +
-          '?time=' +
-          new Date().getHours()
-      )
-      .then((response) => {
-        response.data.event_list.forEach((element) => {
-          if (element.ended_at > this.unixTime) {
-            this.events.push(element)
+    let time = this.unixTime
+    let addEvent = (element) => {
+      this.events.push(element)
+    }
+    let addEndEvent = (element) => {
+      this.events.push(element)
+    }
+    let changeFlg = () => {
+      this.loading = false
+    }
+
+    const db = firebase.firestore()
+
+    db.collection('event-list')
+      .doc('all')
+      .get()
+      .then(function (doc) {
+        let eventList = doc.data()
+        eventList.event_list.forEach((element) => {
+          if (element.ended_at > time) {
+            addEvent(element)
           } else {
-            this.endEvent.push(element)
+            addEndEvent(element)
           }
         })
-        this.loading = false
+        changeFlg()
       })
+
+    // axios
+    //   .get(
+    //     process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST +
+    //       '?time=' +
+    //       new Date().getHours()
+    //   )
+    //   .then((response) => {
+    //     response.data.event_list.forEach((element) => {
+    //       if (element.ended_at > this.unixTime) {
+    //         this.events.push(element)
+    //       } else {
+    //         this.endEvent.push(element)
+    //       }
+    //     })
+    //     this.loading = false
+    //   })
 
     axios
       .get(

@@ -97,7 +97,14 @@ export default {
     BASE_IMG: process.env.BASE_IMG,
     DESCRIPTION: process.env.DESCRIPTION,
     SHOWROOM_EVENT_ANALYZE_API_UEL: process.env.SHOWROOM_EVENT_ANALYZE_API_UEL,
-    SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST: process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST
+    SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST: process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST,
+    APIKEY: process.env.APIKEY,
+    AUTHDOMAIN: process.env.AUTHDOMAIN,
+    PROJECTID: process.env.PROJECTID,
+    STORAGEBUCKET: process.env.STORAGEBUCKET,
+    MESSAGINGSENDERID: process.env.MESSAGINGSENDERID,
+    APPID: process.env.APPID,
+    MEASUREMENTID: process.env.MEASUREMENTID,
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
