@@ -157,7 +157,12 @@ export default {
   async asyncData({ env, params }) {
     let eventData = null
     await axios
-      .get(env.SHOWROOM_EVENT_ANALYZE_API_UEL + params.id + '.json')
+      .get(
+        env.SHOWROOM_EVENT_ANALYZE_API_UEL +
+          params.id +
+          '.json?time=' +
+          new Date().getHours()
+      )
       .then((response) => {
         eventData = response.data
       })

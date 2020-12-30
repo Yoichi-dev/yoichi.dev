@@ -109,8 +109,13 @@ export default {
   },
   mounted() {
     this.unixTime = Math.floor(new Date().getTime() / 1000)
+
     axios
-      .get(process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST)
+      .get(
+        process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST +
+          '?time=' +
+          new Date().getHours()
+      )
       .then((response) => {
         response.data.event_list.forEach((element) => {
           if (element.ended_at > this.unixTime) {
