@@ -1,16 +1,17 @@
 <template>
   <v-row justify="center" align="center">
+    <v-col cols="12" md="10" align="center"> システム改修中… </v-col>
     <v-col cols="12" md="10" align="center" v-if="loading">
-      <v-progress-circular
+      <!-- <v-progress-circular
         :size="70"
         :width="7"
         color="green"
         indeterminate
-      ></v-progress-circular>
+      ></v-progress-circular> -->
     </v-col>
-    <v-col cols="12" md="10" align="center">
+    <!-- <v-col cols="12" md="10" align="center">
       <h1 class="text-h5 mt-10">現在集計中のイベント</h1>
-    </v-col>
+    </v-col> -->
     <v-col cols="12" md="10">
       <v-row v-if="events.length">
         <v-col cols="12" sm="4" md="4" v-for="(event, i) in events" :key="i">
@@ -41,12 +42,12 @@
       </v-row>
       <v-row v-else>
         <!-- 分析サーバーのコストが割りに合わなかったため停止中…<br /><br />面白いから見たい、必要だって人は連絡ください<br /><br />再開するかも -->
-        現在集計中のイベントはありません<br /><br />また、1時～7時はシステム休止中です
+        <!-- 現在集計中のイベントはありません<br /><br />また、1時～7時はシステム休止中です -->
       </v-row>
     </v-col>
 
     <v-col cols="12" md="10" align="center">
-      <h1 class="text-h5 mt-10">終了したイベント</h1>
+      <!-- <h1 class="text-h5 mt-10">終了したイベント</h1> -->
     </v-col>
     <v-col cols="12" md="10">
       <v-row v-if="endEvent.length">
@@ -76,7 +77,7 @@
           </v-hover>
         </v-col>
       </v-row>
-      <v-row v-else> 現在集計済みのイベントはありません </v-row>
+      <!-- <v-row v-else> 現在集計済みのイベントはありません </v-row> -->
     </v-col>
   </v-row>
 </template>
@@ -122,22 +123,22 @@ export default {
       this.loading = false
     }
 
-    const db = firebase.firestore()
+    // const db = firebase.firestore()
 
-    db.collection('event-list')
-      .doc('all')
-      .get()
-      .then(function (doc) {
-        let eventList = doc.data()
-        eventList.event_list.forEach((element) => {
-          if (element.ended_at > time) {
-            addEvent(element)
-          } else {
-            addEndEvent(element)
-          }
-        })
-        changeFlg()
-      })
+    // db.collection('event-list')
+    //   .doc('all')
+    //   .get()
+    //   .then(function (doc) {
+    //     let eventList = doc.data()
+    //     eventList.event_list.forEach((element) => {
+    //       if (element.ended_at > time) {
+    //         addEvent(element)
+    //       } else {
+    //         addEndEvent(element)
+    //       }
+    //     })
+    //     changeFlg()
+    //   })
 
     // axios
     //   .get(
