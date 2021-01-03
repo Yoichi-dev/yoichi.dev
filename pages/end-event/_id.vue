@@ -149,18 +149,29 @@
 import axios from 'axios'
 import moment from 'moment'
 import Chart from '@/components/Chart.vue'
+import firebase from '@/plugins/firebase'
 
 export default {
   components: {
     Chart,
   },
   async asyncData({ env, params }) {
+    const db = firebase.firestore()
+
     let eventData = null
-    await axios
-      .get(env.SHOWROOM_EVENT_ANALYZE_API_UEL + params.id + '.json')
-      .then((response) => {
-        eventData = response.data
+    await db
+      .collection('event')
+      .doc(String(params.id))
+      .get()
+      .then(function (doc) {
+        eventData = doc.data()
       })
+    // let eventData = null
+    // await axios
+    //   .get(env.SHOWROOM_EVENT_ANALYZE_API_UEL + params.id + '.json')
+    //   .then((response) => {
+    //     eventData = response.data
+    //   })
     return { eventData }
   },
   data() {

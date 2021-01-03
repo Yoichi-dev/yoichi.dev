@@ -116,7 +116,7 @@ export default {
       this.events.push(element)
     }
     let addEndEvent = (element) => {
-      this.events.push(element)
+      this.endEvent.push(element)
     }
     let changeFlg = () => {
       this.loading = false
