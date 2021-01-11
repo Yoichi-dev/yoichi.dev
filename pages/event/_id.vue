@@ -3,6 +3,64 @@
     <v-col cols="12" md="10">
       <v-row>
         <v-col cols="12">
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">参加ルーム名</th>
+                  <th class="text-left">
+                    参加ルーム情報・分析<br />個別分析はデータ取得に多少時間が掛かります
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="user in eventData.data" :key="user.room_id">
+                  <td>{{ user.room_name }}</td>
+                  <td>
+                    <v-btn
+                      class="ma-2"
+                      outlined
+                      color="indigo"
+                      target="_blank"
+                      :href="
+                        'https://www.showroom-live.com/' + user.room_url_key
+                      "
+                    >
+                      ルーム
+                    </v-btn>
+                    <v-btn
+                      class="ma-2"
+                      outlined
+                      color="indigo"
+                      target="_blank"
+                      :href="
+                        'https://www.showroom-live.com/room/profile?room_id=' +
+                        user.room_id
+                      "
+                    >
+                      プロフィール
+                    </v-btn>
+                    <v-btn
+                      class="ma-2"
+                      outlined
+                      color="green"
+                      @click="overlay = !overlay"
+                      :to="eventId + '/' + user.room_id"
+                    >
+                      個別分析
+                    </v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          <v-overlay :value="overlay">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
+        </v-col>
+      </v-row>
+      <v-row class="mt-10">
+        <v-col cols="12">
           <v-card>
             <v-card-text>
               <p class="display-1 text--primary">本日の時間別ポイント集計</p>
@@ -159,6 +217,7 @@ export default {
     const db = firebase.firestore()
 
     let eventData = null
+    let eventId = String(params.id)
     await db
       .collection('event')
       .doc(String(params.id))
@@ -166,21 +225,11 @@ export default {
       .then(function (doc) {
         eventData = doc.data()
       })
-
-    // await axios
-    //   .get(
-    //     env.SHOWROOM_EVENT_ANALYZE_API_UEL +
-    //       params.id +
-    //       '.json?time=' +
-    //       new Date().getHours()
-    //   )
-    //   .then((response) => {
-    //     eventData = response.data
-    //   })
-    return { eventData }
+    return { eventData, eventId }
   },
   data() {
     return {
+      overlay: false,
       loaded: false,
       height: 400,
       pointChartdata: {

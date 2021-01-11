@@ -139,23 +139,6 @@ export default {
         changeFlg()
       })
 
-    // axios
-    //   .get(
-    //     process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST +
-    //       '?time=' +
-    //       new Date().getHours()
-    //   )
-    //   .then((response) => {
-    //     response.data.event_list.forEach((element) => {
-    //       if (element.ended_at > this.unixTime) {
-    //         this.events.push(element)
-    //       } else {
-    //         this.endEvent.push(element)
-    //       }
-    //     })
-    //     this.loading = false
-    //   })
-
     axios
       .get(
         'https://niconico-showroom-api.herokuapp.com/analyze/showroom-event-analyzer'

@@ -53,7 +53,7 @@
       </v-container>
     </v-main>
 
-    <v-footer :inset="footer.inset" app>
+    <v-footer :inset="footer.inset" absolute app>
       <span class="px-4"
         >&copy; {{ new Date().getFullYear() + ' ' + footerTitle }}</span
       >
@@ -75,6 +75,11 @@ export default {
           icon: 'mdi-calendar-plus',
           title: '集計イベント追加',
           to: '/add',
+        },
+        {
+          icon: 'mdi-tools',
+          title: '配信補助ツール',
+          to: '/tools',
         },
         {
           icon: 'mdi-information-outline',

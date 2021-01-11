@@ -1,204 +1,283 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" md="10">
-      <v-row>
-        <v-col cols="12">
+    <v-col cols="12">
+      <v-row class="mt-10">
+        <v-col cols="12" md="5">
+          <v-img :src="roomData.image"></v-img>
+        </v-col>
+        <v-col cols="12" md="7">
           <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">参加ルーム名</th>
-                  <th class="text-left">
-                    参加ルーム情報・分析<br />個別分析はデータ取得に多少時間が掛かります
-                  </th>
-                </tr>
-              </thead>
+            <template>
               <tbody>
-                <tr v-for="user in eventData.data" :key="user.room_id">
-                  <td>{{ user.room_name }}</td>
+                <tr>
+                  <td>参加イベント</td>
                   <td>
-                    <v-btn
-                      class="ma-2"
-                      outlined
-                      color="indigo"
-                      target="_blank"
-                      :href="
-                        'https://www.showroom-live.com/' + user.room_url_key
-                      "
-                    >
-                      ルーム
-                    </v-btn>
-                    <v-btn
-                      class="ma-2"
-                      outlined
-                      color="indigo"
-                      target="_blank"
-                      :href="
-                        'https://www.showroom-live.com/room/profile?room_id=' +
-                        user.room_id
-                      "
-                    >
-                      プロフィール
-                    </v-btn>
-                    <v-btn
-                      class="ma-2"
-                      outlined
-                      color="green"
-                      @click="overlay = !overlay"
-                      :to="eventId + '/' + user.room_id"
-                    >
-                      個別分析
-                    </v-btn>
+                    <a :href="eventData.event_url" target="_blank">{{
+                      eventData.event_name
+                    }}</a>
                   </td>
                 </tr>
+                <tr>
+                  <td>ルーム名</td>
+                  <td>{{ roomData.room_name }}</td>
+                </tr>
+                <tr>
+                  <td>ルームレベル</td>
+                  <td>{{ roomData.room_level }}</td>
+                </tr>
+                <tr>
+                  <td>ジャンル</td>
+                  <td>{{ roomData.genre_name }}</td>
+                </tr>
+                <tr>
+                  <td>配信ページ</td>
+                  <td>
+                    <a :href="roomData.share_url_live" target="_blank">{{
+                      roomData.room_url_key
+                    }}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>プロフィールページ</td>
+                  <td>
+                    <a :href="roomData.share_url" target="_blank">{{
+                      roomData.room_id
+                    }}</a>
+                  </td>
+                </tr>
+                <!-- <tr>
+                <td></td>
+                <td>{{ roomData. }}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>{{ roomData. }}</td>
+              </tr> -->
               </tbody>
             </template>
           </v-simple-table>
-          <v-overlay :value="overlay">
-            <v-progress-circular indeterminate size="64"></v-progress-circular>
-          </v-overlay>
         </v-col>
       </v-row>
+      <!-- <h1 class="display-1">{{ roomData.room_name }}</h1> -->
+    </v-col>
+    <v-col cols="12" md="10">
       <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
+        <v-col cols="12" md="4">
+          <v-card class="mx-auto">
             <v-card-text>
-              <p class="display-1 text--primary">全期間ポイント集計</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <div>順位</div>
+              <p class="display-1 text--primary">
+                {{
+                  userData[0].point[userData[0].point.length - 1].rank
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}位 <small>/ {{ eventData.data.length }}位中</small>
+                <span
+                  v-if="
+                    userData[0].point[userData[0].point.length - 1].rank ==
+                    userData[0].point[userData[0].point.length - 2].rank
+                  "
+                  class="blue--text"
+                  >ー</span
+                >
+                <span
+                  v-else-if="
+                    userData[0].point[userData[0].point.length - 1].rank <
+                    userData[0].point[userData[0].point.length - 2].rank
+                  "
+                  class="green--text"
+                  >↑</span
+                >
+                <span v-else class="red--text">↓</span>
+              </p>
+              <div>
+                <div
+                  class="text--primary"
+                  v-if="
+                    userData[0].point[userData[0].point.length - 1].rank ==
+                    userData[0].point[userData[0].point.length - 2].rank
+                  "
+                >
+                  順位変動無し<span class="yellow--text">　-　</span>
+                </div>
+                <div
+                  v-else-if="
+                    userData[0].point[userData[0].point.length - 1].rank >
+                    userData[0].point[userData[0].point.length - 2].rank
+                  "
+                >
+                  前回集計時順位<span class="red--text"
+                    >　{{
+                      userData[0].point[userData[0].point.length - 2].rank
+                    }}位　</span
+                  >
+                </div>
+                <div v-else>
+                  前回集計時順位<span class="green--text"
+                    >　{{
+                      userData[0].point[userData[0].point.length - 2].rank
+                    }}位　</span
+                  >
+                </div>
+              </div>
             </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="allPointChartdata"
-              :options="pointOptions"
-              :height="height"
-            />
           </v-card>
         </v-col>
-      </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
+        <v-col cols="12" md="4">
+          <v-card class="mx-auto">
             <v-card-text>
-              <p class="display-1 text--primary">全期間フォロワー遷移</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <div>トータルポイント</div>
+              <p class="display-1 text--primary">
+                {{
+                  userData[0].point[userData[0].point.length - 1].point
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}pt
+              </p>
+              <div class="text--primary">
+                {{
+                  userData[0].point[userData[0].point.length - 1].rank != 1
+                    ? '次の順位まであと'
+                    : '2位との差'
+                }}
+                {{
+                  userData[0].point[userData[0].point.length - 1].gap
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}pt
+              </div>
             </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="allFollowerChartdata"
-              :options="followerOptions"
-              :height="height"
-            />
           </v-card>
         </v-col>
-      </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
+        <v-col cols="12" md="4">
+          <v-card class="mx-auto">
             <v-card-text>
-              <p class="display-1 text--primary">全期間順位遷移</p>
-              <v-card-subtitle>※集計開始時からの</v-card-subtitle>
+              <div>フォロワー数</div>
+              <p class="display-1 text--primary">
+                {{
+                  roomData.follower_num
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}人
+                <span
+                  v-if="
+                    roomData.follower_num ==
+                    userData[0].point[userData[0].point.length - 2].follower_num
+                  "
+                  class="blue--text"
+                  >ー</span
+                >
+                <span
+                  v-else-if="
+                    roomData.follower_num >
+                    userData[0].point[userData[0].point.length - 2].follower_num
+                  "
+                  class="green--text"
+                  >↑</span
+                >
+                <span v-else class="red--text">↓</span>
+              </p>
+              <div
+                class="text--primary"
+                v-if="
+                  roomData.follower_num ==
+                  userData[0].point[userData[0].point.length - 2].follower_num
+                "
+              >
+                フォロワー変動無し<span class="yellow--text">　-　</span>
+              </div>
+              <div
+                v-else-if="
+                  roomData.follower_num <
+                  userData[0].point[userData[0].point.length - 2].follower_num
+                "
+              >
+                前回集計時より<span class="red--text"
+                  >　-{{
+                    userData[0].point[userData[0].point.length - 2]
+                      .follower_num - roomData.follower_num
+                  }}人　</span
+                >
+              </div>
+              <div v-else>
+                前回集計時より<span class="green--text"
+                  >　+{{
+                    roomData.follower_num -
+                    userData[0].point[userData[0].point.length - 2]
+                      .follower_num
+                  }}人　</span
+                >
+              </div>
             </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="allRankChartdata"
-              :options="rankOptions"
-              :height="height"
-            />
           </v-card>
         </v-col>
-      </v-row>
 
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
+        <v-col cols="12" md="4">
+          <v-card class="mx-auto">
             <v-card-text>
-              <p class="display-1 text--primary">日別ポイント集計</p>
+              <div>イベント内平均ポイント</div>
+              <p class="display-1 text--primary">
+                {{ pointAvg.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') }}pt
+                <span
+                  v-if="
+                    userData[0].point[userData[0].point.length - 1].point >
+                    pointAvg
+                  "
+                  class="green--text"
+                  >↑</span
+                >
+                <span v-else class="red--text">↓</span>
+              </p>
             </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="dayPointChartdata"
-              :options="pointOptions"
-              :height="height"
-            />
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-card class="mx-auto">
+            <v-card-text>
+              <div>イベント内フォロワー平均人数</div>
+              <p class="display-1 text--primary">
+                {{
+                  followerAvg.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}人
+                <span
+                  v-if="
+                    userData[0].point[userData[0].point.length - 1]
+                      .follower_num > followerAvg
+                  "
+                  class="green--text"
+                  >↑</span
+                >
+                <span v-else class="red--text">↓</span>
+              </p>
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
-            <v-card-text>
-              <p class="display-1 text--primary">日別フォロワー遷移</p>
-            </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="dayFollowerChartdata"
-              :options="followerOptions"
-              :height="height"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
-            <v-card-text>
-              <p class="display-1 text--primary">日別順位遷移</p>
-            </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="dayRankChartdata"
-              :options="rankOptions"
-              :height="height"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12">
-          <v-card>
-            <v-card-text>
-              <p class="display-1 text--primary">本日の時間別ポイント集計</p>
-            </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="pointChartdata"
-              :options="pointOptions"
-              :height="height"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
-            <v-card-text>
-              <p class="display-1 text--primary">本日の時間別フォロワー遷移</p>
-            </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="followerChartdata"
-              :options="followerOptions"
-              :height="height"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row class="mt-10">
-        <v-col cols="12">
-          <v-card>
-            <v-card-text>
-              <p class="display-1 text--primary">本日の時間別順位遷移</p>
-            </v-card-text>
-            <Chart
-              v-if="loaded"
-              :chartdata="rankChartdata"
-              :options="rankOptions"
-              :height="height"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
+    </v-col>
+    <v-col cols="12" md="10" v-if="contribution">
+      <v-col>
+        <h1 class="text-caption">貢献100位までのユーザー</h1>
+      </v-col>
+      <v-col>
+        <v-simple-table>
+          <template>
+            <thead>
+              <tr>
+                <th class="text-left">ランキング</th>
+                <th class="text-left">貢献ユーザー</th>
+                <th class="text-left">支援ポイント</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, i) in contribution" :key="i">
+                <td>{{ item.rank }}</td>
+                <td>{{ item.user }}</td>
+                <td>{{ item.point }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-col>
     </v-col>
   </v-row>
 </template>
@@ -216,26 +295,44 @@ export default {
   async asyncData({ env, params }) {
     const db = firebase.firestore()
 
-    let eventData = null
-    let eventId = String(params.id)
+    let eventData = []
+    let userData = null
+    let roomData = null
     await db
       .collection('event')
-      .doc(String(params.id))
+      .doc(String(params.event))
       .get()
       .then(function (doc) {
         eventData = doc.data()
+        userData = eventData.data.filter((val) => {
+          return val.room_id == params.id
+        })
       })
-    // let eventData = null
-    // await axios
-    //   .get(env.SHOWROOM_EVENT_ANALYZE_API_UEL + params.id + '.json')
-    //   .then((response) => {
-    //     eventData = response.data
-    //   })
-    return { eventData, eventId }
+
+    await axios
+      .get('http://192.168.11.2:3001/apis/profile/' + params.id)
+      .then((response) => {
+        roomData = response.data
+      })
+
+    let contribution = null
+    let url = eventData.event_url.split('/')
+
+    await axios
+      .get(
+        'http://192.168.11.2:3001/apis/contribution/' +
+          url[url.length - 1] +
+          '/' +
+          params.id
+      )
+      .then((response) => {
+        contribution = response.data
+      })
+      .catch((e) => {})
+    return { eventData, userData, roomData, contribution }
   },
   data() {
     return {
-      overlay: false,
       loaded: false,
       height: 400,
       pointChartdata: {
@@ -330,28 +427,44 @@ export default {
           ],
         },
       },
+      pointAvg: 0,
+      followerAvg: 0,
     }
   },
   head() {
     return {
-      title: this.eventData.event_name,
+      title: this.roomData.room_name,
       htmlAttrs: {
         lang: 'ja',
       },
     }
   },
   mounted() {
-    this.unixTime = Math.floor(new Date().getTime() / 1000)
-    this.hourChart()
-    this.dayChart()
-    this.allChart()
-    if (this.eventData.data.length > 10) {
-      if (window.parent.screen.width < 600) {
-        this.height = 800
-      } else {
-        this.height = 600
-      }
+    let followerSum = 0
+    let pointSum = 0
+
+    for (let i = 0; i < this.eventData.data.length; i++) {
+      pointSum += this.eventData.data[i].point[
+        this.eventData.data[i].point.length - 1
+      ].point
+      followerSum += this.eventData.data[i].point[
+        this.eventData.data[i].point.length - 1
+      ].follower_num
     }
+
+    this.pointAvg = Math.round(pointSum / this.eventData.data.length)
+    this.followerAvg = Math.round(followerSum / this.eventData.data.length)
+    // this.unixTime = Math.floor(new Date().getTime() / 1000)
+    // this.hourChart()
+    // this.dayChart()
+    // this.allChart()
+    // if (this.eventData.data.length > 10) {
+    //   if (window.parent.screen.width < 600) {
+    //     this.height = 800
+    //   } else {
+    //     this.height = 600
+    //   }
+    // }
   },
   methods: {
     hourChart() {
