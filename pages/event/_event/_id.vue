@@ -67,7 +67,7 @@
     <v-col cols="12" md="10">
       <v-row class="mt-5">
         <v-col cols="12" md="4">
-          <v-card class="mx-auto">
+          <v-card class="mx-auto" v-if="userData[0].point.length > 1">
             <v-card-text>
               <div>順位</div>
               <p class="display-1 text--primary">
@@ -126,7 +126,21 @@
               </div>
             </v-card-text>
           </v-card>
+
+          <v-card class="mx-auto" v-else>
+            <v-card-text>
+              <div>順位</div>
+              <p class="display-1 text--primary">
+                {{
+                  userData[0].point[userData[0].point.length - 1].rank
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}位 <small>/ {{ eventData.data.length }}位中</small>
+              </p>
+            </v-card-text>
+          </v-card>
         </v-col>
+
         <v-col cols="12" md="4">
           <v-card class="mx-auto">
             <v-card-text>
@@ -154,7 +168,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
-          <v-card class="mx-auto">
+          <v-card class="mx-auto" v-if="userData[0].point.length > 1">
             <v-card-text>
               <div>フォロワー数</div>
               <p class="display-1 text--primary">
@@ -212,6 +226,18 @@
                   }}人　</span
                 >
               </div>
+            </v-card-text>
+          </v-card>
+          <v-card class="mx-auto" v-else>
+            <v-card-text>
+              <div>フォロワー数</div>
+              <p class="display-1 text--primary">
+                {{
+                  roomData.follower_num
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}人
+              </p>
             </v-card-text>
           </v-card>
         </v-col>
