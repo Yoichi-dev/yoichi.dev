@@ -339,6 +339,30 @@
                     .toString()
                     .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
                 }}pt
+                <small class="text-caption"
+                  >/ 前日比
+                  {{
+                    Math.round(
+                      ((dayPoint[dayPoint.length - 1] -
+                        dayPoint[dayPoint.length - 2]) /
+                        dayPoint[dayPoint.length - 2]) *
+                        100
+                    )
+                  }}%</small
+                >
+                <span
+                  v-if="
+                    Math.round(
+                      ((dayPoint[dayPoint.length - 1] -
+                        dayPoint[dayPoint.length - 2]) /
+                        dayPoint[dayPoint.length - 2]) *
+                        100
+                    ) >= 100
+                  "
+                  class="green--text"
+                  >↑</span
+                >
+                <span v-else class="red--text">↓</span>
               </p>
             </v-card-text>
           </v-card>
