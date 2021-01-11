@@ -310,7 +310,9 @@ export default {
       })
 
     await axios
-      .get('http://192.168.11.2:3001/apis/profile/' + params.id)
+      .get(
+        'https://niconico-showroom-api.herokuapp.com/apis/profile/' + params.id
+      )
       .then((response) => {
         roomData = response.data
       })
@@ -320,7 +322,7 @@ export default {
 
     await axios
       .get(
-        'http://192.168.11.2:3001/apis/contribution/' +
+        'https://niconico-showroom-api.herokuapp.com/apis/contribution/' +
           url[url.length - 1] +
           '/' +
           params.id
