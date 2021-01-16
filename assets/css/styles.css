@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'yuzuFont';
+  src: url('../font/yuzu.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'mojiFont';
+  src: url('../font/moji.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'sharpFont';
+  src: url('../font/sharp.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'syokakiFont';
+  src: url('../font/syokaki.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'tamanegiFont';
+  src: url('../font/tamanegi.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'dohetaFont';
+  src: url('../font/doheta.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'sayonaraFont';
+  src: url('../font/sayonara.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'framboiseFont';
+  src: url('../font/framboise.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'sasagakiFont';
+  src: url('../font/sasagaki.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'takibiFont';
+  src: url('../font/takibi.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'puikkoFont';
+  src: url('../font/puikko.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'albertellaFont';
+  src: url('../font/albertella.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'waptiaFont';
+  src: url('../font/waptia.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'kaisoFont';
+  src: url('../font/kaiso.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'popFont';
+  src: url('../font/pop.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'pigmoFont';
+  src: url('../font/pigmo.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'minecraftFont';
+  src: url('../font/minecraft.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: '851Font';
+  src: url('../font/851.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'dsegFont';
+  src: url('../font/dseg.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: 'cinecaptionFont';
+  src: url('../font/cinecaption.woff2') format("woff2");
+}

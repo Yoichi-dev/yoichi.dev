@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 require('dotenv').config()
 
 export default {
@@ -11,20 +9,19 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - Showroom Event Analyzer',
-    title: 'Showroom Event Analyzer',
+    title: 'clock',
     htmlAttrs: {
       lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.DESCRIPTION },
+      { hid: 'description', name: 'description', content: process.env.DESCRIPTION_N },
       { hid: 'og:site_name', property: 'og:site_name', content: process.env.BASE_TITLE },
       { hid: 'og:type', property: 'og:type', content: 'website' },
       { hid: 'og:url', property: 'og:url', content: process.env.BASE_URL },
       { hid: 'og:title', property: 'og:title', content: process.env.BASE_TITLE },
-      { hid: 'og:description', property: 'og:description', content: process.env.DESCRIPTION },
+      { hid: 'og:description', property: 'og:description', content: process.env.DESCRIPTION_N },
       { hid: 'og:image', property: 'og:image', content: process.env.BASE_IMG },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
@@ -35,10 +32,12 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
+    { src: '@assets/css/styles.css' }
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    { src: '~/plugins/localStorage.js', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -46,8 +45,6 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -58,32 +55,19 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/dotenv',
     ['@nuxtjs/moment', ['ja']],
+    "~/modules/uikit"
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
 
-  // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
-  vuetify: {
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      dark: false,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
-  },
-
-  server: {
-    host: '0.0.0.0'
+  // 環境設定
+  env: {
+    BASE_URL: process.env.BASE_URL,
+    BASE_TITLE: process.env.BASE_TITLE,
+    BASE_IMG: process.env.BASE_IMG,
+    DESCRIPTION: process.env.DESCRIPTION_N,
+    MICROCMSKEY: process.env.MICROCMSKEY,
   },
 
   // 動的ルーティングを行う
@@ -91,20 +75,8 @@ export default {
     fallback: true
   },
 
-  env: {
-    BASE_URL: process.env.BASE_URL,
-    BASE_TITLE: process.env.BASE_TITLE,
-    BASE_IMG: process.env.BASE_IMG,
-    DESCRIPTION: process.env.DESCRIPTION,
-    SHOWROOM_EVENT_ANALYZE_API_UEL: process.env.SHOWROOM_EVENT_ANALYZE_API_UEL,
-    SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST: process.env.SHOWROOM_EVENT_ANALYZE_API_EVENT_LIST,
-    APIKEY: process.env.APIKEY,
-    AUTHDOMAIN: process.env.AUTHDOMAIN,
-    PROJECTID: process.env.PROJECTID,
-    STORAGEBUCKET: process.env.STORAGEBUCKET,
-    MESSAGINGSENDERID: process.env.MESSAGINGSENDERID,
-    APPID: process.env.APPID,
-    MEASUREMENTID: process.env.MEASUREMENTID,
+  server: {
+    host: '0.0.0.0'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
