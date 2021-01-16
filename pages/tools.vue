@@ -39,6 +39,13 @@ export default {
     return {
       tools: [
         {
+          title: '現在時刻',
+          content: '配信の隅に置いて表示できるアプリケーション',
+          date: '2021/01/16(土)',
+          url: 'https://clock.yoichi.dev/',
+          img: require('@/assets/img/clock.png'),
+        },
+        {
           title: '配信日記（仮）',
           content:
             'SR配信中のコメント、ギフトのログを全部記録して後から見返す事が出来るアプリケーション',
