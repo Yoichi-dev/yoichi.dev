@@ -3,21 +3,31 @@
     <section>
       <v-row no-gutters>
         <v-img
-          :min-height="'calc(100vh - ' + $vuetify.application.top +'px)'"
+          :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
           v-bind:src="require('@/assets/img/top.webp')"
         >
           <v-theme-provider dark>
             <v-container fill-height>
-              <v-row align="center" class="white--text mx-auto" justify="center">
+              <v-row
+                align="center"
+                class="white--text mx-auto"
+                justify="center"
+              >
                 <v-col class="white--text text-center" cols="12" tag="h1">
                   <span
-                    :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']"
+                    :class="[
+                      $vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2',
+                    ]"
                     class="font-weight-light"
-                  >Welcom</span>
+                    >Welcom</span
+                  >
                   <br />
                   <span
-                    :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']"
-                  >{{title}}</span>
+                    :class="[
+                      $vuetify.breakpoint.smAndDown ? 'display-3' : 'display-4',
+                    ]"
+                    >{{ title }}</span
+                  >
                 </v-col>
                 <v-btn
                   class="aligin-self-end"
@@ -54,7 +64,7 @@
         <div></div>
         <v-btn
           class="ma-2"
-          href="https://twitter.com/Yoichi_dev"
+          href="https://twitter.com/TYoichiro"
           target="_blank"
           rel="noopener"
           large
