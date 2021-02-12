@@ -1,20 +1,26 @@
 # yoichi.dev
+勉強がてら作成した個人サイトになります
 
-## Build Setup
+・Nuxt.js  
+・Contentful  
+・Vuetify
 
-```bash
-# install dependencies
+[![Github issues](https://img.shields.io/github/issues/Yoichi-dev/yoichi.dev)](https://github.com/Yoichi-dev/yoichi.dev/issues)
+[![Github forks](https://img.shields.io/github/forks/Yoichi-dev/yoichi.dev)](https://github.com/Yoichi-dev/yoichi.dev/network/members)
+[![Github stars](https://img.shields.io/github/stars/Yoichi-dev/yoichi.dev)](https://github.com/Yoichi-dev/yoichi.dev/stargazers)
+[![Github top language](https://img.shields.io/github/languages/top/Yoichi-dev/yoichi.dev)](https://github.com/Yoichi-dev/yoichi.dev/)
+[![Github license](https://img.shields.io/github/license/Yoichi-dev/yoichi.dev)](https://github.com/Yoichi-dev/yoichi.dev/)
+
+# Demo
+https://yoichi.dev/
+
+# Installation
+Cloneした後.envファイルを作成し下記コマンドで実行できます
+```
+# パッケージのインストール
 $ npm install
 
-# serve with hot reload at localhost:3000
+# ローカルホストで動作（localhost:3000）
 $ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
