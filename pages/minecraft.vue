@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row align="center" justify="center">
-      <v-card class="mx-auto my-12">
+      <v-card class="mx-auto my-12" v-if="Object.keys(minecraft).length === 3">
         <template slot="progress">
           <v-progress-linear
             color="deep-purple"
@@ -23,6 +23,34 @@
             {{ minecraft.players.max }} 人中
           </div>
           <div class="subtitle-1">バージョン　{{ minecraft.version.name }}</div>
+        </v-card-text>
+
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-title>サーバーURL<br />{{ server }}</v-card-title>
+
+        <v-card-text></v-card-text>
+      </v-card>
+
+      <v-card class="mx-auto my-12" v-else>
+        <template slot="progress">
+          <v-progress-linear
+            color="deep-purple"
+            height="10"
+            indeterminate
+          ></v-progress-linear>
+        </template>
+
+        <v-img
+          height="250"
+          :src="require('@/assets/img/minecraft.png')"
+        ></v-img>
+
+        <v-card-title>現在サーバー停止中</v-card-title>
+
+        <v-card-text>
+          <div class="subtitle-1">接続中のユーザ　0 人 / 0 人中</div>
+          <div class="subtitle-1">バージョン　error</div>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
