@@ -16,7 +16,13 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -34,7 +40,11 @@
         @click.stop="primaryDrawer.model = !primaryDrawer.model"
         aria-label="メニュー"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title style="cursor: pointer" @click="$router.push('/')" v-text="title" />
+      <v-toolbar-title
+        style="cursor: pointer"
+        @click="$router.push('/')"
+        v-text="title"
+      />
     </v-app-bar>
 
     <v-main>
@@ -42,7 +52,9 @@
     </v-main>
 
     <v-footer :inset="footer.inset" app>
-      <span class="px-4">&copy; {{ new Date().getFullYear() + " " + title }}</span>
+      <span class="px-4"
+        >&copy; {{ new Date().getFullYear() + ' ' + title }}</span
+      >
     </v-footer>
   </v-app>
 </template>
@@ -71,6 +83,11 @@ export default {
           icon: 'mdi-message-processing-outline',
           title: 'Diary',
           to: '/diary',
+        },
+        {
+          icon: 'mdi-gamepad-variant-outline',
+          title: 'Minecraft',
+          to: '/minecraft',
         },
       ],
       title: 'Yoichi.dev',

@@ -123,11 +123,17 @@ export default {
     BASE_TITLE: process.env.BASE_TITLE,
     BASE_IMG: process.env.BASE_IMG,
     DESCRIPTION: process.env.DESCRIPTION,
+    MINECRAFT_SERVER: process.env.MINECRAFT_SERVER,
+    MINECRAFT_PING: process.env.MINECRAFT_PING,
   },
 
   // 動的ルーティングを行う
   generate: {
     fallback: true
+  },
+
+  server: {
+    host: '0.0.0.0'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

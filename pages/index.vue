@@ -86,7 +86,7 @@
         </v-btn>
         <v-btn
           class="ma-2"
-          href="https://www.instagram.com/yoichiro.todaka"
+          href="https://www.instagram.com/todaka.yoichiro"
           target="_blank"
           rel="noopener"
           large
