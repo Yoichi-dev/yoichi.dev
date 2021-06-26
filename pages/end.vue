@@ -29,9 +29,9 @@
 import axios from 'axios'
 
 export default {
-  async asyncData() {
+  async asyncData({ env }) {
     let events = null
-    await axios.get('/api/events').then((response) => {
+    await axios.get(env.API_URL + '/api/events').then((response) => {
       events = response.data
     })
     let nowTime = Math.round(new Date().getTime() / 1000)

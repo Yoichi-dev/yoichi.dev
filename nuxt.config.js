@@ -60,11 +60,11 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    proxy: true,
-    baseURL: '/api',
+    // proxy: true,
+    // baseURL: '/api',
   },
 
-  proxy: { "/api": { target: 'https://my-api.work:61808' } },
+  // proxy: { "/api": { target: 'https://my-api.work:61808' } },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -97,6 +97,7 @@ export default {
   env: {
     BASE_IMG: process.env.BASE_IMG,
     MINECRAFT_SERVER: process.env.MINECRAFT_SERVER,
+    API_URL: process.env.API_URL
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

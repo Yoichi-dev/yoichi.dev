@@ -41,9 +41,9 @@
 import axios from 'axios'
 
 export default {
-  async asyncData() {
+  async asyncData({ env }) {
     let avatars = null
-    await axios.get('/api/avatars').then((response) => {
+    await axios.get(env.API_URL + '/api/avatars').then((response) => {
       avatars = response.data
     })
     return { avatars }

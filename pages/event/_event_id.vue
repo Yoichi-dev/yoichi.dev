@@ -208,27 +208,31 @@ export default {
   components: {
     Chart,
   },
-  async asyncData({ params }) {
+  async asyncData({ env, params }) {
     let eventData = null
-    await axios.get('/api/events/' + params.event_id).then((response) => {
-      eventData = response.data
-    })
+    await axios
+      .get(env.API_URL + '/api/events/' + params.event_id)
+      .then((response) => {
+        eventData = response.data
+      })
 
     let userList = null
     await axios
-      .get('/api/events/' + params.event_id + '/users')
+      .get(env.API_URL + '/api/events/' + params.event_id + '/users')
       .then((response) => {
         userList = response.data
       })
 
     let eventHistory = null
-    await axios.get('/api/histories/' + params.event_id).then((response) => {
-      eventHistory = response.data
-    })
+    await axios
+      .get(env.API_URL + '/api/histories/' + params.event_id)
+      .then((response) => {
+        eventHistory = response.data
+      })
 
     let aggregateData = null
     await axios
-      .get('/api/histories/aggregate/' + params.event_id)
+      .get(env.API_URL + '/api/histories/aggregate/' + params.event_id)
       .then((response) => {
         aggregateData = response.data
       })
