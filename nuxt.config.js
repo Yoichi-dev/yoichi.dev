@@ -26,7 +26,7 @@ export default {
       { hid: 'og:title', property: 'og:title', content: 'Point History' },
       { hid: 'og:description', property: 'og:description', content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます' },
       { hid: 'og:image', property: 'og:image', content: process.env.BASE_IMG },
-      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:card', content: 'summary' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
