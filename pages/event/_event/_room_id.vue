@@ -220,8 +220,8 @@
                     .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
                 }}pt
               </v-list-item-title>
-              <v-list-item-subtitle v-if="todayPointList.length > 3"
-                >前日比
+              <v-list-item-subtitle v-if="todayPointList.length > 3">
+                前日比
                 {{
                   Math.round(
                     ((todayPointList[todayPointList.length - 1] -
@@ -232,8 +232,21 @@
                   )
                     .toString()
                     .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
-                }}%</v-list-item-subtitle
-              >
+                }}%
+              </v-list-item-subtitle>
+              <v-list-item-subtitle v-else>
+                前日比
+                {{
+                  Math.round(
+                    ((todayPointList[todayPointList.length - 1] -
+                      todayPointList[todayPointList.length - 2]) /
+                      todayPointList[todayPointList.length - 2]) *
+                      100
+                  )
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+                }}%
+              </v-list-item-subtitle>
             </v-list-item-content>
             <v-icon
               v-if="todayPointList.length > 3"
@@ -256,6 +269,31 @@
                     todayPointList[todayPointList.length - 2]) /
                     (todayPointList[todayPointList.length - 2] -
                       todayPointList[todayPointList.length - 3])) *
+                    100
+                ) >= 100
+                  ? 'mdi-trending-up'
+                  : 'mdi-trending-down'
+              }}
+            </v-icon>
+            <v-icon
+              v-else
+              size="80"
+              :color="
+                Math.round(
+                  ((todayPointList[todayPointList.length - 1] -
+                    todayPointList[todayPointList.length - 2]) /
+                    todayPointList[todayPointList.length - 2]) *
+                    100
+                ) >= 100
+                  ? 'green'
+                  : 'red'
+              "
+            >
+              {{
+                Math.round(
+                  ((todayPointList[todayPointList.length - 1] -
+                    todayPointList[todayPointList.length - 2]) /
+                    todayPointList[todayPointList.length - 2]) *
                     100
                 ) >= 100
                   ? 'mdi-trending-up'
