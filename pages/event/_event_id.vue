@@ -92,7 +92,7 @@
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-5">
-      <v-expansion-panels id="list" popout>
+      <v-expansion-panels mandatory="true" id="list" popout>
         <v-expansion-panel>
           <v-expansion-panel-header>参加者リスト</v-expansion-panel-header>
           <v-expansion-panel-content>
