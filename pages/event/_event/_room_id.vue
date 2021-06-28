@@ -756,7 +756,7 @@ export default {
         label: room_name,
         data: todayData.map((e) => e.point),
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.7)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -767,7 +767,7 @@ export default {
         label: room_name,
         data: todayData.map((e) => e.follower_num),
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.7)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -778,7 +778,7 @@ export default {
         label: room_name,
         data: todayData.map((e) => e.rank),
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.7)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -838,7 +838,7 @@ export default {
         label: room_name,
         data: dayPointList,
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -849,7 +849,7 @@ export default {
         label: room_name,
         data: dayFollowerList,
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -882,7 +882,7 @@ export default {
         label: room_name,
         data: userData.map((e) => e.point),
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
@@ -893,7 +893,7 @@ export default {
         label: room_name,
         data: userData.map((e) => e.follower_num),
         backgroundColor:
-          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0)',
+          'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 0.5)',
         borderColor:
           'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)',
       })
