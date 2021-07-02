@@ -46,6 +46,34 @@ export default {
   head() {
     return {
       title: 'HOME',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます',
+        },
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: 'SRイベントポイント集計履歴',
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます',
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: 'https://yoichi.dev/common/ogp_img.png',
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary',
+        },
+      ],
     }
   },
 }

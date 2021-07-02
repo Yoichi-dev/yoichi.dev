@@ -325,7 +325,39 @@ export default {
   },
   head() {
     return {
-      title: 'イベントデータ',
+      title: this.eventData[0].event_name,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            this.eventData[0].event_name +
+            'のポイント集計履歴を確認する事ができます',
+        },
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.eventData[0].event_name + '| Point History',
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content:
+            this.eventData[0].event_name +
+            'のポイント集計履歴を確認する事ができます',
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: this.eventData[0].image,
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image',
+        },
+      ],
     }
   },
   mounted() {

@@ -19,14 +19,8 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます' },
-      { hid: 'og:site_name', property: 'og:site_name', content: 'SRイベントポイント集計履歴' },
       { hid: 'og:type', property: 'og:type', content: 'website' },
       { hid: 'og:url', property: 'og:url', content: 'https://point-history.yoichi.dev/' },
-      { hid: 'og:title', property: 'og:title', content: 'SRイベントポイント集計履歴' },
-      { hid: 'og:description', property: 'og:description', content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます' },
-      { hid: 'og:image', property: 'og:image', content: process.env.BASE_IMG },
-      { name: 'twitter:card', content: 'summary' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -95,7 +89,6 @@ export default {
   },
 
   env: {
-    BASE_IMG: process.env.BASE_IMG,
     MINECRAFT_SERVER: process.env.MINECRAFT_SERVER,
     API_URL: process.env.API_URL
   },

@@ -20,7 +20,7 @@
 
         <v-img
           height="250"
-          :src="require('@/assets/img/minecraft.png')"
+          src="https://point-history.yoichi.dev/mincraft.png"
         ></v-img>
 
         <v-card-title>{{ minecraft.description.text }}</v-card-title>
@@ -51,7 +51,7 @@
 
         <v-img
           height="250"
-          :src="require('@/assets/img/minecraft.png')"
+          src="https://point-history.yoichi.dev/mincraft.png"
         ></v-img>
 
         <v-card-title>現在サーバー停止中</v-card-title>
@@ -114,7 +114,7 @@ export default {
         {
           hid: 'twitter:card',
           property: 'twitter:card',
-          content: 'summary_large_image ',
+          content: 'summary_large_image',
         },
       ],
     }
