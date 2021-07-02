@@ -334,7 +334,11 @@ export default {
             this.eventData[0].event_name +
             'のポイント集計履歴を確認する事ができます',
         },
-        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'twitter:creator',
+          property: 'twitter:creator',
+          content: '@yoichiro_sub',
+        },
         {
           hid: 'og:title',
           property: 'og:title',
@@ -348,8 +352,8 @@ export default {
             'のポイント集計履歴を確認する事ができます',
         },
         {
-          hid: 'og:url',
-          property: 'og:url',
+          hid: 'og:image',
+          property: 'og:image',
           content: this.eventData[0].image,
         },
         {

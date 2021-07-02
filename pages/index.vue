@@ -52,7 +52,11 @@ export default {
           name: 'description',
           content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます',
         },
-        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'twitter:creator',
+          property: 'twitter:creator',
+          content: '@yoichiro_sub',
+        },
         {
           hid: 'og:title',
           property: 'og:title',
@@ -64,8 +68,8 @@ export default {
           content: 'SHORWOOMイベントのポイント集計履歴を確認する事ができます',
         },
         {
-          hid: 'og:url',
-          property: 'og:url',
+          hid: 'og:image',
+          property: 'og:image',
           content: 'https://yoichi.dev/common/ogp_img.png',
         },
         {

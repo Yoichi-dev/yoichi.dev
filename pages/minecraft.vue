@@ -95,7 +95,11 @@ export default {
           name: 'description',
           content: '誰でも使えるマインクラフトサーバーになります',
         },
-        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'twitter:creator',
+          property: 'twitter:creator',
+          content: '@yoichiro_sub',
+        },
         {
           hid: 'og:title',
           property: 'og:title',
@@ -107,8 +111,8 @@ export default {
           content: '誰でも使えるマインクラフトサーバーになります',
         },
         {
-          hid: 'og:url',
-          property: 'og:url',
+          hid: 'og:image',
+          property: 'og:image',
           content: 'https://point-history.yoichi.dev/mincraft.png',
         },
         {
