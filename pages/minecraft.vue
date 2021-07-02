@@ -89,6 +89,34 @@ export default {
   head() {
     return {
       title: 'Minecraftサーバー',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '誰でも使えるマインクラフトサーバーになります',
+        },
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: 'マインクラフトサーバー',
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: '誰でも使えるマインクラフトサーバーになります',
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: require('@/assets/img/server.png'),
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image ',
+        },
+      ],
     }
   },
 }

@@ -80,7 +80,7 @@ export default {
         },
         {
           icon: 'mdi-gamepad-variant-outline',
-          title: 'Minecraft',
+          title: 'マイクラサーバー',
           to: '/minecraft',
         },
       ],
