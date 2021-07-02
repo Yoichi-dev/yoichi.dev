@@ -109,7 +109,7 @@ export default {
         {
           hid: 'og:url',
           property: 'og:url',
-          content: require('@/assets/img/server.png'),
+          content: 'https://point-history.yoichi.dev/mincraft.png',
         },
         {
           hid: 'twitter:card',
