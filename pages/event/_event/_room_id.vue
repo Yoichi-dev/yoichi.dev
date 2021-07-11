@@ -210,7 +210,7 @@
         </v-card>
       </v-col>
       <!-- 本日のポイント -->
-      <v-col cols="12" sm="6" lg="4" xl="3">
+      <v-col cols="12" sm="6" lg="4" xl="3" v-if="todayFlg">
         <v-card class="mx-auto" outlined>
           <v-list-item three-line v-if="todayPointList.length > 1">
             <v-list-item-content>
