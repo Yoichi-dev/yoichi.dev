@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="mt-5" justify="center">
+    <v-row class="mt-5 px-3" justify="center">
       <v-alert outlined type="warning" prominent border="left">
         イベント中、途中参加・辞退した人が発生した場合グラフ表示が崩れるバグが発生する事があります。<br />（現在修正中…）
       </v-alert>
@@ -113,7 +113,7 @@
                         color="green"
                         :to="user.event_id + '/' + user.room_id"
                       >
-                        詳細
+                        個別分析
                       </v-btn>
                     </td>
                   </tr>
