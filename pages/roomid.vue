@@ -119,7 +119,7 @@ export default {
       // キー取得
       axios
         .get(
-          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+          'https://niconico-showroom-api.herokuapp.com/api/users/live/' +
             replaceRoomId
         )
         .then((response) => {
