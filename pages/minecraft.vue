@@ -80,7 +80,7 @@ export default {
     let server = null
     server = env.MINECRAFT_SERVER
 
-    await axios.get(env.API_URL + '/api/game').then((response) => {
+    await axios.get(env.API_URL + '/api/minecraft').then((response) => {
       minecraft = response.data
     })
 
