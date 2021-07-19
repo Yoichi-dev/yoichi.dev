@@ -449,7 +449,7 @@ export default {
 
       axios
         .get(
-          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+          'https://niconico-showroom-api.herokuapp.com/api/users/live/' +
             replaceRoomId
         )
         .then((response) => {
@@ -576,7 +576,7 @@ export default {
       this.loadingKey = true
       axios
         .get(
-          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+          'https://niconico-showroom-api.herokuapp.com/api/users/live/' +
             this.roomId
         )
         .then((response) => {
