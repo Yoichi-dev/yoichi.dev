@@ -412,7 +412,7 @@ export default {
 
       axios
         .get(
-          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+          'https://niconico-showroom-api.herokuapp.com/api/users/live/' +
             replaceRoomId
         )
         .then((response) => {
@@ -490,15 +490,14 @@ export default {
       this.loadingKey = true
       axios
         .get(
-          'https://niconico-showroom-api.herokuapp.com/apis/live_info/' +
+          'https://niconico-showroom-api.herokuapp.com/api/users/live/' +
             this.roomId
         )
         .then((response) => {
           if (response.data != '') {
             if (response.data.bcsvr_key != '') {
-              document.getElementById(
-                'room_name'
-              ).innerText = this.roomData.room_name
+              document.getElementById('room_name').innerText =
+                this.roomData.room_name
               this.socket.send('SUB	' + response.data.bcsvr_key)
               setInterval(() => {
                 this.socket.send('PING	showroom')
