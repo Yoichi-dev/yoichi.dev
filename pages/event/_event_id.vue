@@ -124,9 +124,12 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-row>
-    <!-- <v-row justify="center" class="my-10 px-5">
-      <v-select :items="selectItems" label="表示件数" outlined></v-select>
-    </v-row> -->
+    <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
+      <v-alert outlined type="warning" prominent border="left">
+        最終集計ptはあくまでも59分00秒時点での集計ptになります<br />
+        （59分59秒時点のptではありません）
+      </v-alert>
+    </v-row>
     <v-row justify="center" class="mt-10" v-if="todayFlg">
       <p class="mt-10 title text--primary">本日の時間別ポイント</p>
       <Chart
@@ -221,6 +224,12 @@ export default {
         eventData = response.data
       })
 
+    let nowTime = Math.round(new Date().getTime() / 1000)
+    let endFlg = false
+    if (eventData[0].ended_at < nowTime) {
+      endFlg = true
+    }
+
     let userList = null
     await axios
       .get(env.API_URL + '/api/events/' + params.event_id + '/users')
@@ -242,7 +251,7 @@ export default {
         aggregateData = response.data
       })
 
-    return { eventData, userList, eventHistory, aggregateData }
+    return { eventData, userList, eventHistory, aggregateData, endFlg }
   },
   data() {
     return {

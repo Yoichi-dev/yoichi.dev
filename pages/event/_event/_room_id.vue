@@ -53,6 +53,12 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
+      <v-alert outlined type="warning" prominent border="left">
+        最終集計ptはあくまでも59分00秒時点での集計ptになります<br />
+        （59分59秒時点のptではありません）
+      </v-alert>
+    </v-row>
     <v-row id="viewWidth">
       <!-- 順位 -->
       <v-col cols="12" sm="6" lg="4" xl="3">
@@ -555,6 +561,19 @@ export default {
       .then((response) => {
         aggregateData = response.data
       })
+
+    let eventData = null
+    await axios
+      .get(env.API_URL + '/api/events/' + params.event)
+      .then((response) => {
+        eventData = response.data
+      })
+
+    let nowTime = Math.round(new Date().getTime() / 1000)
+    let endFlg = false
+    if (eventData[0].ended_at < nowTime) {
+      endFlg = true
+    }
 
     return { userData, aggregateData, eventHistory }
   },
