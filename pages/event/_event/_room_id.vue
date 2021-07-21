@@ -1,8 +1,9 @@
 <template>
   <div>
-    <v-row class="mt-5 px-3" justify="center">
+    <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
       <v-alert outlined type="warning" prominent border="left">
-        イベント中、途中参加・辞退した人が発生した場合グラフ表示が崩れるバグが発生する事があります。<br />（現在修正中…）
+        最終集計ptはあくまでも59分00秒時点での集計ptになります<br />
+        （59分59秒時点のptではありません）
       </v-alert>
     </v-row>
     <v-row>
@@ -52,12 +53,6 @@
           </span>
         </v-row>
       </v-col>
-    </v-row>
-    <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
-      <v-alert outlined type="warning" prominent border="left">
-        最終集計ptはあくまでも59分00秒時点での集計ptになります<br />
-        （59分59秒時点のptではありません）
-      </v-alert>
     </v-row>
     <v-row id="viewWidth">
       <!-- 順位 -->
@@ -575,7 +570,7 @@ export default {
       endFlg = true
     }
 
-    return { userData, aggregateData, eventHistory }
+    return { userData, aggregateData, eventHistory, endFlg }
   },
   data() {
     return {
