@@ -14,7 +14,13 @@
             :elevation="hover ? 16 : 2"
             @click="$router.push('/event/' + event.event_id)"
           >
-            <v-img :src="event.image"></v-img>
+            <v-img
+              :src="
+                event.image
+                  .replace('_s.png', '_l.png')
+                  .replace('_s.jpeg', '_l.jpeg')
+              "
+            ></v-img>
           </v-card>
         </v-hover>
       </v-col>
