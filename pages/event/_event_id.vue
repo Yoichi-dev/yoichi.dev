@@ -7,7 +7,13 @@
     </v-row>
     <v-row>
       <v-col cols="12" md="6">
-        <v-img :src="eventData[0].image.replace('_s.png', '_l.png')"></v-img>
+        <v-img
+          :src="
+            eventData[0].image
+              .replace('_s.png', '_l.png')
+              .replace('_s.jpeg', '_l.jpeg')
+          "
+        ></v-img>
       </v-col>
       <v-col cols="12" md="6">
         <v-simple-table>
