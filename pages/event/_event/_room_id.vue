@@ -8,7 +8,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" md="6">
-        <v-img :src="userData.image"></v-img>
+        <v-img :src="userData.image.replace('_m.png', '_l.png')"></v-img>
       </v-col>
       <v-col cols="12" md="6">
         <v-simple-table>
