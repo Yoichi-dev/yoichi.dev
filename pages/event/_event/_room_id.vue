@@ -6,6 +6,15 @@
         （59分59秒時点のptではありません）
       </v-alert>
     </v-row>
+    <v-row class="mt-10 px-3" justify="center">
+      <v-alert outlined type="info" prominent border="left">
+        このサイト専用のTwitterアカウント（<a
+          href="https://twitter.com/SrPointHistory"
+          target="_blank"
+          >@SrPointHistory</a
+        >）作成したので是非フォローしてください！
+      </v-alert>
+    </v-row>
     <v-row>
       <v-col cols="12" md="6">
         <v-img
