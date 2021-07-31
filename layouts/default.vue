@@ -68,11 +68,11 @@ export default {
           title: '開催済イベント',
           to: '/end',
         },
-        {
-          icon: 'mdi-jellyfish-outline',
-          title: 'アバター一覧',
-          to: '/avatar',
-        },
+        // {
+        //   icon: 'mdi-jellyfish-outline',
+        //   title: 'アバター一覧',
+        //   to: '/avatar',
+        // },
         {
           icon: 'mdi-tools',
           title: '配信補助ツール',
