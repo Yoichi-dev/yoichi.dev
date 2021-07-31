@@ -560,7 +560,8 @@ export default {
       this.avgPoint = Math.round(sumPoint / this.aggregateData.length)
       this.avgFollower = Math.round(sumFollower / this.aggregateData.length)
       this.entry = this.aggregateData.length
-      this.period = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24))
+      this.period =
+        Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1
     },
     createChart() {
       let nowDate = new Date()
