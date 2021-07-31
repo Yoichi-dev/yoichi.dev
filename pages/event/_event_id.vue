@@ -447,7 +447,7 @@ export default {
       } else if (this.entry > 15 && this.entry <= 25) {
         // 25人以下
         this.chartStyle = {
-          height: '160vh',
+          height: '140vh',
           width: `${this.chartWidth}px`,
           position: 'relative',
         }
