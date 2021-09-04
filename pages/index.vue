@@ -205,7 +205,6 @@ export default {
       await axios
         .get(`${process.env.API_URL}/api/users/${this.roomId}`)
         .then((response) => {
-          // this.roomData = response.data;
           this.title = response.data.room_name;
           // フォロワー
           this.infoData[1].num = response.data.follower_num;
@@ -524,17 +523,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.pointer {
-  cursor: pointer;
-}
-
-.scrollbar {
-  overflow: scroll;
-}
-
-.scrollbar::-webkit-scrollbar {
-  display: none;
-}
-</style>
