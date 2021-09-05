@@ -237,7 +237,7 @@ export default {
     },
     async getTelop() {
       await axios
-        .get(`${config.API_URL}/api/live/telop/${this.roomId}`)
+        .get(`${process.env.API_URL}/api/live/telop/${this.roomId}`)
         .then((response) => {
           this.telop = response.data.telop;
         });
