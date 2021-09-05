@@ -306,7 +306,13 @@ export default {
         if (Object.keys(getJson).length === 9) {
           // コメントログ
           // カウント
-          if (Number.isFinite(Number(getJson.cm)) && Number(getJson.cm) <= 50) {
+          let commentFormat = getJson.cm.replace(/[０-９]/g, (s) => {
+            return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+          });
+          if (
+            Number.isFinite(Number(commentFormat)) &&
+            Number(commentFormat) <= 50
+          ) {
             this.getCount(getJson);
           } else {
             // ブロックしている人は除去
