@@ -146,6 +146,7 @@ export default {
       giftSize: "20vh",
       comentSize: "70vh",
       rankingSize: "70vh",
+      checkPing: null,
     };
   },
   head() {
@@ -276,10 +277,12 @@ export default {
       // エラー発生時
       this.socket.onerror = (error) => {
         alert("エラーが発生しました\nページをリロードしてください");
+        this.socket.close();
+        clearInterval(this.checkPing);
         location.reload();
       };
       // 疎通確認
-      setInterval(() => {
+      this.checkPing = setInterval(() => {
         this.socket.send("PING\tshowroom");
         this.update();
         this.getRanking();
@@ -294,6 +297,8 @@ export default {
 
         if (data.data === "ERR") {
           alert("エラーが発生しました\nページをリロードしてください");
+          this.socket.close();
+          clearInterval(this.checkPing);
           location.reload();
           return;
         }
@@ -342,6 +347,7 @@ export default {
         } else if (Object.keys(getJson).length === 4) {
           if (getJson.t == 101) {
             this.socket.close();
+            clearInterval(this.checkPing);
             alert("配信が終了しました");
           }
           if (getJson.t == 5) {
