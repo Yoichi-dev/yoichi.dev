@@ -3,7 +3,7 @@
     <v-col
       cols="12"
       sm="6"
-      lg="4"
+      lg="3"
       xl="3"
       v-for="(info, index) in infoData"
       :key="index"
