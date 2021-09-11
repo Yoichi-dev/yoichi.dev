@@ -2,6 +2,7 @@
   <v-row>
     <v-dialog v-model="dialog" width="800" v-if="listenerData != null">
       <listener
+        @parentMethod="updateDialog"
         :listenerData="listenerData"
         :blockList="blockList"
         :favoriteList="favoriteList"
@@ -68,6 +69,9 @@ export default {
           this.dialog = !this.dialog;
           this.listenerData.account_id = id;
         });
+    },
+    updateDialog(flg) {
+      this.dialog = flg;
     },
   },
 };

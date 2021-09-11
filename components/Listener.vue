@@ -125,12 +125,12 @@
       </v-tab-item>
     </v-tabs>
 
-    <!-- <v-card-actions>
+    <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn class="grey lighten-3" @click="dialog = false" right rounded text>
+      <v-btn class="grey lighten-3" @click="closeDialog()" right rounded text>
         　閉じる　
       </v-btn>
-    </v-card-actions> -->
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -177,6 +177,9 @@ export default {
         this.favoriteList.push(Number(id));
         this.$store.commit("setFavoriteList", this.favoriteList);
       }
+    },
+    closeDialog() {
+      this.$emit("parentMethod", false);
     },
   },
 };

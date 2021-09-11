@@ -517,7 +517,7 @@ export default {
           this.folowerNum = response.data.follower_num;
           if (response.data.is_onlive) {
             // 総視聴者
-            this.viewNum = response.data.view_num;
+            this.infoData[2].num = response.data.view_num;
           }
         });
     },
