@@ -429,7 +429,11 @@ export default {
       }
 
       // 既に存在するか確認
-      if (this.preGifts.some((e) => e.id == commentObj.u)) {
+      if (
+        this.preGifts.some(
+          (e) => e.id == commentObj.u && e.gitId == commentObj.g
+        )
+      ) {
         let flg = true;
         let targetId = "";
 
@@ -450,7 +454,7 @@ export default {
         if (!flg) {
           let preGiftData = null;
           this.preGifts.some((val, i) => {
-            if (val.id == targetId) {
+            if (val.id == targetId && val.gitId == commentObj.g) {
               preGiftData = val;
               this.preGifts.splice(i, 1);
             }
