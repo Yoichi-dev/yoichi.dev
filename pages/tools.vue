@@ -39,6 +39,13 @@ export default {
     return {
       tools: [
         {
+          title: 'Watch Log',
+          content: '配信中のコメント・ギフトログを確認できるアプリケーション',
+          date: '2021/09/05(日)',
+          url: 'https://watch-log.yoichi.dev/',
+          img: require('@/assets/img/watch.jpg'),
+        },
+        {
           title: '現在時刻',
           content: '配信の隅に置いて表示できるアプリケーション',
           date: '2021/01/16(土)',
@@ -66,8 +73,7 @@ export default {
           content:
             'すこアニのフォントを手軽に変更できる拡張機能（Google Chrome版）',
           date: '2020/07/11(土)',
-          url:
-            'https://chrome.google.com/webstore/detail/showroom-%E3%81%99%E3%81%93%E3%82%A2%E3%83%8B-%E4%BB%AE-%CE%B2%E7%89%88%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E5%A4%89%E6%9B%B4%E6%A9%9F/nmknohiegmphpeadmmpkfdhddedfbool?hl=ja&authuser=0',
+          url: 'https://chrome.google.com/webstore/detail/showroom-%E3%81%99%E3%81%93%E3%82%A2%E3%83%8B-%E4%BB%AE-%CE%B2%E7%89%88%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E5%A4%89%E6%9B%B4%E6%A9%9F/nmknohiegmphpeadmmpkfdhddedfbool?hl=ja&authuser=0',
           img: require('@/assets/img/suko.png'),
         },
         {
