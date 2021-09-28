@@ -198,8 +198,6 @@ export default {
         this.favoriteList = this.$store.state.favoriteList;
       }
     }, 0);
-    // HEROKU起動
-    axios.get(`${process.env.API_URL_SUB}`);
   },
   methods: {
     async checkLive() {
@@ -226,28 +224,28 @@ export default {
           }
         });
       if (flg) {
+        // テロップ取得
+        await this.getTelop();
+        // ライブランキング取得
+        await this.getRanking();
         // 使えるギフトリスト取得
         await this.getUseGiftList();
         // 配信情報取得
         await this.getLiveData();
         // 接続
         this.connectSocket();
-        // テロップ取得
-        await this.getTelop();
-        // ライブランキング取得
-        await this.getRanking();
       }
     },
     async getTelop() {
       await axios
-        .get(`${process.env.API_URL_SUB}/api/live/telop/${this.roomId}`)
+        .get(`${process.env.API_URL}/api/live/telop/${this.roomId}`)
         .then((response) => {
           this.telop = response.data.telop;
         });
     },
     async getRanking() {
       await axios
-        .get(`${process.env.API_URL_SUB}/api/live/ranking/${this.roomId}`)
+        .get(`${process.env.API_URL}/api/live/ranking/${this.roomId}`)
         .then((response) => {
           this.ranking = response.data.stage_user_list;
         });
@@ -360,28 +358,14 @@ export default {
       };
     },
     getComment(commentObj) {
-      if (commentObj.cm != undefined) {
-        if (commentObj.u == this.adminId) {
-          // 管理者機能
-          let msg = commentObj.cm.split("_");
-          if (msg[0] != "g") {
-            this.commentData = {
-              id: commentObj.u,
-              name: commentObj.ac,
-              comment: commentObj.cm,
-              flg: commentObj.ua,
-              avatar: commentObj.av,
-            };
-          }
-        } else {
-          this.commentData.unshift({
-            id: commentObj.u,
-            name: commentObj.ac,
-            comment: commentObj.cm,
-            flg: commentObj.ua,
-            avatar: commentObj.av,
-          });
-        }
+      if (commentObj.cm != "") {
+        this.commentData.unshift({
+          id: commentObj.u,
+          name: commentObj.ac,
+          comment: commentObj.cm,
+          flg: commentObj.ua,
+          avatar: commentObj.av,
+        });
       }
     },
     getfreeGift(commentObj) {
