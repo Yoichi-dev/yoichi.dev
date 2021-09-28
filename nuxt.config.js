@@ -75,7 +75,8 @@ export default {
   },
 
   env: {
-    API_URL: process.env.API_URL
+    API_URL: process.env.API_URL,
+    API_URL_SUB: process.env.API_URL_SUB
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
