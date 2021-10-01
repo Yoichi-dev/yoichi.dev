@@ -1,6 +1,15 @@
 <template>
   <div class="mt-1">
-    <search :fulldialog.sync="fulldialog" />
+    <v-row class="mt-5 px-3" justify="center">
+      <v-alert outlined type="error" prominent border="left">
+        このサイトのURLが新しくなりました（<a
+          href="https://point-history.showroom-app.com/"
+          target="_blank"
+          >Point History</a
+        >）今後はこちらをお使いください
+      </v-alert>
+    </v-row>
+    <!-- <search :fulldialog.sync="fulldialog" />
     <v-row justify="center" align="center" v-if="!connectBtn">
       <v-btn
         class="ma-2"
@@ -20,14 +29,12 @@
       >
         初期化
       </v-btn>
-    </v-row>
+    </v-row> -->
     <!-- 基本情報 -->
-    <info :infoData="infoData" />
-    <v-row>
+    <!-- <info :infoData="infoData" /> -->
+    <!-- <v-row>
       <v-col cols="12" sm="6">
-        <!-- テロップ -->
         <telop :telop="telop" />
-        <!-- コメント -->
         <comment
           :commentData="commentData"
           :heightSize="comentSize"
@@ -39,7 +46,6 @@
       <v-col cols="12" sm="6">
         <v-row>
           <v-col cols="12" lg="6">
-            <!-- 無料ギフト -->
             <gift
               :gifts="freeGifts"
               :heightSize="giftSize"
@@ -47,7 +53,6 @@
               :favoriteList="favoriteList"
               :adminId="adminId"
             />
-            <!-- 有料ギフト -->
             <gift
               :gifts="preGifts"
               :heightSize="giftSize"
@@ -55,7 +60,6 @@
               :favoriteList="favoriteList"
               :adminId="adminId"
             />
-            <!-- カウント -->
             <count
               :countList="countList"
               :heightSize="giftSize"
@@ -65,7 +69,6 @@
             />
           </v-col>
           <v-col cols="12" lg="6">
-            <!-- ランキング -->
             <ranking
               :ranking="ranking"
               :heightSize="rankingSize"
@@ -77,7 +80,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
