@@ -1,21 +1,21 @@
 <template>
   <div>
-    <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
+    <!-- <v-row class="mt-5 px-3" justify="center" v-if="endFlg">
       <v-alert outlined type="error" prominent border="left">
         最終集計ptはあくまでも59分00秒時点での集計ptになります<br />
         （59分59秒時点のptではありません）
       </v-alert>
-    </v-row>
+    </v-row> -->
     <v-row class="mt-10 px-3" justify="center">
-      <v-alert outlined type="info" prominent border="left">
-        このサイト専用のTwitterアカウント（<a
-          href="https://twitter.com/SrPointHistory"
+      <v-alert outlined type="error" prominent border="left">
+        このサイトのURLが新しくなりました（<a
+          href="https://point-history.showroom-app.com/"
           target="_blank"
-          >@SrPointHistory</a
-        >）作成したので是非フォローしてください！
+          >Point History</a
+        >）今後はこちらをお使いください
       </v-alert>
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" md="6">
         <v-img
           :src="
@@ -69,9 +69,9 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row id="viewWidth">
-      <!-- 順位 -->
-      <v-col cols="12" sm="6" lg="4" xl="3">
+    <v-row id="viewWidth"> -->
+    <!-- 順位 -->
+    <!-- <v-col cols="12" sm="6" lg="4" xl="3">
         <v-card class="mx-auto" outlined>
           <v-list-item three-line v-if="this.eventHistory.length > 1">
             <v-list-item-content>
@@ -170,9 +170,9 @@
             </v-icon>
           </v-list-item>
         </v-card>
-      </v-col>
-      <!-- トータルポイント -->
-      <v-col cols="12" sm="6" lg="4" xl="3">
+      </v-col> -->
+    <!-- トータルポイント -->
+    <!-- <v-col cols="12" sm="6" lg="4" xl="3">
         <v-card class="mx-auto" outlined>
           <v-list-item three-line v-if="this.eventHistory.length > 1">
             <v-list-item-content>
@@ -224,9 +224,9 @@
             <v-icon size="80" color="blue"> mdi-swap-vertical </v-icon>
           </v-list-item>
         </v-card>
-      </v-col>
-      <!-- 本日のポイント -->
-      <v-col cols="12" sm="6" lg="4" xl="3" v-if="todayFlg">
+      </v-col> -->
+    <!-- 本日のポイント -->
+    <!-- <v-col cols="12" sm="6" lg="4" xl="3" v-if="todayFlg">
         <v-card class="mx-auto" outlined>
           <v-list-item three-line v-if="todayPointList.length > 1">
             <v-list-item-content>
@@ -321,9 +321,9 @@
                   : 'mdi-trending-down'
               }}
             </v-icon>
-          </v-list-item>
-          <!-- 初回 -->
-          <v-list-item three-line v-else>
+          </v-list-item> -->
+    <!-- 初回 -->
+    <!-- <v-list-item three-line v-else>
             <v-list-item-content>
               <div class="text-overline mb-4">本日のポイント</div>
               <v-list-item-title class="text-h5 mb-1">
@@ -337,9 +337,9 @@
             <v-icon size="80" color="blue"> mdi-swap-vertical </v-icon>
           </v-list-item>
         </v-card>
-      </v-col>
-      <!-- フォロワー数 -->
-      <v-col cols="12" sm="6" lg="4" xl="3">
+      </v-col> -->
+    <!-- フォロワー数 -->
+    <!-- <v-col cols="12" sm="6" lg="4" xl="3">
         <v-card class="mx-auto" outlined>
           <v-list-item three-line v-if="this.eventHistory.length > 1">
             <v-list-item-content>
@@ -463,8 +463,8 @@
           </v-list-item>
         </v-card>
       </v-col>
-    </v-row>
-    <v-row justify="center" class="mt-10" v-if="todayFlg">
+    </v-row> -->
+    <!-- <v-row justify="center" class="mt-10" v-if="todayFlg">
       <p class="mt-10 title text--primary">本日の時間別ポイント</p>
       <Chart
         :chart-data="todayPointData"
@@ -537,7 +537,7 @@
         :options="rankOptions"
         :styles="chartStyle"
       />
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 

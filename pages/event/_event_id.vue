@@ -1,15 +1,15 @@
 <template>
   <div>
     <v-row class="mt-5 px-3" justify="center">
-      <v-alert outlined type="info" prominent border="left">
-        このサイト専用のTwitterアカウント（<a
-          href="https://twitter.com/SrPointHistory"
+      <v-alert outlined type="error" prominent border="left">
+        このサイトのURLが新しくなりました（<a
+          href="https://point-history.showroom-app.com/"
           target="_blank"
-          >@SrPointHistory</a
-        >）作成したので是非フォローしてください！
+          >Point History</a
+        >）今後はこちらをお使いください
       </v-alert>
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" md="6">
         <v-img
           :src="
@@ -213,7 +213,7 @@
         :options="rankOptions"
         :styles="chartStyle"
       />
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
