@@ -3,9 +3,9 @@
     <v-row class="mt-5 px-3" justify="center">
       <v-alert outlined type="error" prominent border="left">
         このサイトのURLが新しくなりました（<a
-          href="https://point-history.showroom-app.com/"
+          href="https://watch-log.showroom-app.com/"
           target="_blank"
-          >Point History</a
+          >Watch Log</a
         >）今後はこちらをお使いください
       </v-alert>
     </v-row>
